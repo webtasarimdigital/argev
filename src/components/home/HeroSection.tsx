@@ -18,8 +18,11 @@ export function HeroSection() {
   const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.play().catch(() => {
         // Autoplay may be restricted in some browsers without user interaction
         setIsPlaying(false);
       });
@@ -55,23 +58,24 @@ export function HeroSection() {
           poster="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85"
           autoPlay
           loop
-          muted={isMuted}
+          muted
           playsInline
-          className="w-full h-full object-cover opacity-45 scale-105 transition-transform duration-1000"
+          preload="auto"
+          className="w-full h-full object-cover opacity-85 contrast-105 brightness-100 transition-opacity duration-700"
           aria-hidden="true"
         />
 
-        {/* Multi-layered luxury architectural gradients */}
-        <div className="absolute inset-0 bg-gradient-to-t from-navy-dark via-navy-dark/65 to-navy-dark/70" />
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-dark/80 via-transparent to-navy-dark/80" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(134,107,85,0.15)_0%,transparent_75%)]" />
+        {/* Sophisticated architectural gradient: maintains vivid video center while ensuring crystal clear text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-dark via-navy-dark/40 to-navy-dark/60 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-dark/50 via-transparent to-navy-dark/50 pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_40%,rgba(13,26,40,0.5)_100%)] pointer-events-none" />
 
         {/* Video Control Pills (Bottom Right Corner) */}
         <div className="absolute bottom-6 right-6 z-20 hidden sm:flex items-center gap-2">
           <button
             type="button"
             onClick={togglePlay}
-            className="p-2.5 rounded-full bg-navy-dark/75 hover:bg-navy-dark text-white/80 hover:text-white border border-white/10 backdrop-blur-md transition-all shadow-lg"
+            className="p-2.5 rounded-full bg-navy-dark/80 hover:bg-navy-dark text-white/90 hover:text-white border border-white/15 backdrop-blur-md transition-all shadow-lg"
             title={isPlaying ? 'Videoyu Duraklat' : 'Videoyu Başlat'}
             aria-label={isPlaying ? 'Videoyu Duraklat' : 'Videoyu Başlat'}
           >
@@ -80,7 +84,7 @@ export function HeroSection() {
           <button
             type="button"
             onClick={toggleMute}
-            className="p-2.5 rounded-full bg-navy-dark/75 hover:bg-navy-dark text-white/80 hover:text-white border border-white/10 backdrop-blur-md transition-all shadow-lg"
+            className="p-2.5 rounded-full bg-navy-dark/80 hover:bg-navy-dark text-white/90 hover:text-white border border-white/15 backdrop-blur-md transition-all shadow-lg"
             title={isMuted ? 'Sesi Aç' : 'Sesi Kapat'}
             aria-label={isMuted ? 'Sesi Aç' : 'Sesi Kapat'}
           >
