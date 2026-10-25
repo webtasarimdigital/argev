@@ -22,11 +22,36 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'ARGEV Yapı ve Çelik Teknolojileri' }],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://argevyapi.com'),
+  icons: {
+    icon: [
+      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/logo.png', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: ['/favicon.ico'],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
   openGraph: {
     title: 'ARGEV Yapı — Güvenli Çelik Mimarisi & Fiyat Hesaplayıcı',
     description: 'Düzce ve Batı Karadeniz için depreme tam dayanıklı hafif ve ağır çelik evler, çelik villalar. Şeffaf teklif hesaplama.',
     url: 'https://argevyapi.com',
     siteName: 'ARGEV Yapı',
+    images: [
+      {
+        url: '/logo.png',
+        width: 800,
+        height: 800,
+        alt: 'ARGEV Yapı Logo',
+      },
+      {
+        url: '/celik-villa-aksam.jpg',
+        width: 1200,
+        height: 800,
+        alt: 'ARGEV Yapı Çelik Villa',
+      },
+    ],
     locale: 'tr_TR',
     type: 'website',
   },
@@ -43,7 +68,13 @@ export default function RootLayout({
     name: 'ARGEV Yapı ve Çelik Teknolojileri',
     description: 'Düzce ve Batı Karadeniz genelinde hafif ve ağır çelik ev, çelik villa ve çelik garaj inşaatı.',
     url: 'https://argevyapi.com',
-    telephone: '+903805240000',
+    logo: 'https://argevyapi.com/logo.png',
+    image: 'https://argevyapi.com/logo.png',
+    telephone: '+905413980081',
+    sameAs: [
+      'https://www.instagram.com/argevyapiduzce/',
+      'https://share.google/hRm0NKr0D9ILdZyGQ',
+    ],
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Kültür Mah. Mehmet Akif Cad. No: 42/B',
@@ -70,6 +101,10 @@ export default function RootLayout({
   return (
     <html lang="tr" className="scroll-smooth">
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
+        <link rel="icon" href="/logo.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

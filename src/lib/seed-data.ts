@@ -129,7 +129,7 @@ export const INITIAL_SERVICES: Service[] = [
     summary: 'Estetik mimari çizgiler, geniş balkon ve verandalar, panoramik cam cepheler ve yüksek tavanlı ferah villa yaşamı.',
     description: 'Düzce, Akçakoca, Bolu Abant ve Sapanca gibi doğa ile iç içe coğrafyalarda lüks müstakil yaşam hayalini gerçekleştiren ARGEV Çelik Villaları; mimari tasarım özgürlüğü ile statik gücü harmanlar. İki katlı, galeri boşluklu, modern cepheli prestijli yapılar.',
     iconName: 'Castle',
-    featuredImage: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
+    featuredImage: '/celik-villa-aksam.jpg',
     pricingType: 'm2',
     baseM2Price: 19500,
     minM2: 120,
@@ -1014,8 +1014,9 @@ export const INITIAL_PROJECTS: Project[] = [
     steelTonnage: 14.5,
     summary: 'Karadeniz fırtına yüklerine tam dirençli, geniş cam cepheli ve galeri boşluklu iki katlı lüks çelik villa.',
     description: 'Akçakoca sahil yamacındaki sert rüzgar ve nem koşullarına karşı özel galvaniz kaplama ve alüminyum kompozit cephe ile inşa edildi. 8 şiddetindeki olası depremlere karşı tam güvenlik sağlayan taşıyıcı karkas, sadece 52 iş gününde anahtar teslim tamamlandı.',
-    coverImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+    coverImage: '/celik-villa-aksam.jpg',
     galleryImages: [
+      '/celik-villa-aksam.jpg',
       'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
@@ -1122,6 +1123,149 @@ export const INITIAL_BLOG_POSTS: BlogPost[] = [
     publishedAt: '2026-03-20',
     isPublished: true,
   },
+  {
+    id: 'blog-celik-ev-nedir',
+    slug: 'celik-ev-nedir',
+    category: 'Rehber & Nedir?',
+    title: 'Çelik Ev Nedir? 2026 Yapım Rehberi, Dayanıklılık ve Süreç',
+    excerpt: 'Çelik ev nedir, nasıl inşa edilir ve geleneksel betonarmeye göre neden depreme karşı %100 daha güvenlidir? ARGEV Yapı kapsamlı rehberi.',
+    content: `Çelik ev; taşıyıcı iskeleti fabrikasyon olarak yüksek mukavemetli galvanizli çelik profillerden veya sıcak haddelenmiş yapısal çelikten üretilen, depreme karşı en üst düzey güvenlik sağlayan modern ve kalıcı konut türüdür.
+
+## Çelik Ev Nasıl Yapılır?
+
+1. **Zemin Etüdü ve Mimari Tasarım:** Arsanızın imar durumuna ve zemin özelliklerine uygun mimari ve statik projeler hazırlanır.
+2. **Fabrika İmalatı:** Taşıyıcı elemanlar bilgisayar destekli CAD/CAM yazılımları ile sıfır hata toleransıyla üretilir.
+3. **Sahada Montaj:** Hazırlanan subasman betonunun üzerine çelik karkas cıvata ve bulon bağlantılarıyla birleştirilir. Kaynaksız montaj yapının elastikiyetini korur.
+4. **Taşyünü ve Çok Katmanlı Yalıtım:** Duvar boşluklarına A1 yangın sınıfı yüksek yoğunluklu taşyünü yerleştirilir. Tyvek su yalıtım ve nefes alan nem bariyerleri uygulanır.
+5. **İç ve Dış Kaplamalar:** Dış cephede fibercement veya dekoratif sıva; iç mekanda ise çift kat yangına dayanıklı alçıpan, alçı sıva ve boya uygulanır.
+6. **Anahtar Teslim:** Tesisatlar, parke, seramik, banyo ve mutfak donanımları tamamlanarak ortalama 35-45 günde oturuma hazır teslim edilir.
+
+## Neden Çelik Ev Tercih Edilmelidir?
+
+- **Deprem Güvenliği:** Yapı ağırlığı betonarmenin üçte biri kadardır. Sarsıntı anında kırılmaz, esneyerek enerjiyi sönümler.
+- **Hızlı İnşaat:** Hava koşullarından etkilenmeksizin haftalar içinde tamamlanır; betonun kuruma süresini beklemeniz gerekmez.
+- **Isı ve Enerji Tasarrufu:** Taşyünü yalıtımı sayesinde kışın ısıtma, yazın soğutma giderlerinde %40'a varan tasarruf sağlar.
+- **100+ Yıl Hizmet Ömrü:** 275 gr/m² sıcak daldırma galvaniz kaplama ile korozyon ve paslanmaya karşı ömür boyu dayanıklıdır.`,
+    coverImage: '/celik-villa-aksam.jpg',
+    readingTimeMin: 5,
+    publishedAt: '2026-04-01',
+    isPublished: true,
+  },
+  {
+    id: 'blog-hafif-celik-ev-nedir',
+    slug: 'hafif-celik-ev-nedir',
+    category: 'Rehber & Nedir?',
+    title: 'Hafif Çelik Ev Nedir? Betonarmeden Farkları ve Standartları',
+    excerpt: 'Hafif çelik ev nedir? Soğuk şekillendirilmiş galvaniz karkas sistemi, duvar katmanları ve 1-2 katlı konutlarda sunduğu benzersiz avantajlar.',
+    content: `Hafif çelik ev; taşıyıcı duvarları ve çatı makasları 0.8 mm ile 2.5 mm kalınlığında galvaniz kaplı sac profillerin soğuk şekillendirilmesiyle (roll-forming) üretilen, depreme karşı en dirençli kalıcı yapı teknolojisidir.
+
+## Hafif Çelik Evin Betonarmeden Temel Farkları
+
+- **İnşa Süresi:** Hafif çelik 35-45 günde teslim edilirken betonarme ortalama 8-14 ay sürer.
+- **Bina Ağırlığı:** Hafif çelik ~120-150 kg/m² ağırlığındadır; betonarme ise ~600-800 kg/m² ile 4-5 kat daha ağırdır. Deprem yükü ağırlıkla doğru orantılıdır.
+- **Deprem Davranışı:** Hafif çelik esnek (sünek) yapısıyla sarsıntı enerjisini emer; betonarme ise gevrek çatlayıp göçebilir.
+- **Yalıtım Katmanları:** Duvar kesitinin %80'i taşyünü dolguludur. Kışın sıcak, yazın serin kalır.
+- **İşçilik Standartı:** Bütün profiller fabrikada milimetrik CAD/CAM tezgahlarda hazırlanır, şantiyede usta hatası sıfıra indirilir.
+
+## Hafif Çelik Ev Kışın Soğuk Olur mu?
+
+Halk arasında sıkça dile getirilen bu endişe, yalnızca tek cidarlı şantiye konteynerleri için geçerlidir. ARGEV hafif çelik binalarda duvarlar; dış cephe kaplaması, OSB-3, taşyünü, nem bariyeri ve çift kat alçıpandan oluşan 6 katmanlı bir paket şeklinde uygulanır. Isı geçirgenlik katsayısı betonarmeye göre 4 kat daha iyidir.`,
+    coverImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+    readingTimeMin: 4,
+    publishedAt: '2026-04-03',
+    isPublished: true,
+  },
+  {
+    id: 'blog-agir-celik-nedir',
+    slug: 'agir-celik-nedir',
+    category: 'Rehber & Nedir?',
+    title: 'Ağır Çelik Nedir? Geniş Açıklıklı Yapılar ve Mukavemet',
+    excerpt: 'Ağır çelik nedir? Sıcak haddelenmiş çelik kolon ve kirişlerle devasa salonlar, sonsuzluk camları ve sarsılmaz mukavemet.',
+    content: `Ağır çelik; sıcak haddelenmiş IPE, HEA, HEB, NPU ve kutu profiller kullanılarak imal edilen, en yüksek yük taşıma kapasitesine sahip yapısal çelik sistemidir.
+
+## Ağır Çelik Hangi Projelerde Kullanılır?
+
+- **3 Kat ve Üzeri Çelik Binalar:** Yüksek katlı yapılarda deprem ve rüzgar momentlerini karşılamak için.
+- **Geniş Açıklıklı Lüks Villalar:** 7 ila 12 metre arasında kolonsuz ferah salonlar, panoramik cam cepheler ve konsol teraslar için.
+- **Ağır Kar Yükü Alan Bölgeler:** Bolu Abant, Kartalkaya veya yayla bölgelerinde çatıya binen onlarca tonluk kar kütlesini taşımak amacıyla.
+- **Endüstriyel Yapılar ve Garajlar:** Fabrika, depo, filo araç garajları ve spor salonları.
+
+## Hibrit Çelik Mimarisi
+
+ARGEV Yapı projelerinde sıklıkla uyguladığımız hibrit yaklaşımda; ana kolon ve ana kirişler ağır çelik profillerden teşkil edilirken, ara bölmeler ve çatı makasları hafif çelik profillerle tamamlanarak hem kusursuz taşıyıcılık hem de ekonomik bütçe sağlanır.`,
+    coverImage: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80',
+    readingTimeMin: 5,
+    publishedAt: '2026-04-05',
+    isPublished: true,
+  },
+  {
+    id: 'blog-celik-villa-nedir',
+    slug: 'celik-villa-nedir',
+    category: 'Rehber & Nedir?',
+    title: 'Çelik Villa Nedir? Lüks Mimari Çözümler ve Yaşam Standartları',
+    excerpt: 'Çelik villa nedir? Akçakoca sahilinden Bolu eteklerine, modern mimari çizgiler, geniş balkon ve verandalarla donatılmış villa hayatı.',
+    content: `Çelik villa; müstakil yaşam konforunu en ileri çelik mühendisliğiyle buluşturan, estetik tasarım sınırlaması olmaksızın inşa edilen modern prestij konutlarıdır.
+
+## Çelik Villanın Avantajları
+
+1. **Özgür Mimari:** Geniş açıklıklı ferah salonlar, yüksek tavanlı galeri boşlukları ve boydan boya panoramik alüminyum sürme camlar uygulanabilir.
+2. **Kusursuz Su ve Nem İzolasyonu:** Akçakoca gibi deniz kıyısı bölgelerde deniz tuzuna ve neme karşı korozyon dayanımı tamdır; rutubet ve küf oluşmaz.
+3. **Akıllı Ev ve Konfor Sistemleri:** Yerden ısıtma, ısı pompası, VRF iklimlendirme ve şömine baca entegrasyonu projeden itibaren milimetrik planlanır.
+4. **Hızlı Teslimat:** Betonarme villaların 1.5 - 2 yıl süren meşakkatli inşaat süresine kıyasla, 45-60 iş gününde eksiksiz tamamlanır.
+
+ARGEV Yapı; Düzce Merkez, Akçakoca, Bolu, Sakarya ve çevresinde arsanıza özel anahtar teslim çelik villa projeleri geliştirmektedir.`,
+    coverImage: '/celik-villa-aksam.jpg',
+    readingTimeMin: 4,
+    publishedAt: '2026-04-08',
+    isPublished: true,
+  },
+  {
+    id: 'blog-celik-garaj-ve-sundurma-nedir',
+    slug: 'celik-garaj-ve-sundurma-nedir',
+    category: 'Rehber & Nedir?',
+    title: 'Çelik Garaj ve Sundurma Nedir? Avantajları Nelerdir?',
+    excerpt: 'Çelik garaj nedir? Müstakil konutlar ve ticari tesisler için kar, dolu ve güneşten koruyan çelik otopark sistemleri.',
+    content: `Çelik garaj ve sundurma; taşıyıcı iskeleti kutu profil, IPE veya galvanizli çelikten yapılan, araçları dolu, kar, don ve zararlı güneş UV ışınlarından koruyan sağlam açık veya kapalı park yapılarıdır.
+
+## Çelik Garaj Çeşitleri
+
+- **Açık Çelik Sundurma (Carport):** Modern ayaklı konsol tasarımıyla araç giriş-çıkışını engellemeyen, polikarbonat veya kenet sac çatılı sistemler.
+- **Sandviç Panelli Kapalı Garaj:** 50mm PIR dolgulu sandviç panel cephe ve çatısıyla kışın donmayı önleyen, hobi atölyesi olarak da kullanılabilen kapalı garajlar.
+- **Otomatik Seksiyonel Kapılı Garajlar:** Kumandalı ve emniyet fotoselli kapı entegrasyonuyla tam güvenlik sağlayan çözümler.
+
+## Neden Çelik Tercih Edilmelidir?
+
+Ahşap sundurmalar zamanla çürür, eğilir ve yangın riski taşır; hafif tenteler ise ilk fırtınada yırtılır. ARGEV çelik garajları statik rüzgar ve kar hesapları yapılarak 100 km/s üzeri fırtınalara ve yoğun kar yüküne dayanacak şekilde sabitlenir.`,
+    coverImage: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1200&q=85',
+    readingTimeMin: 4,
+    publishedAt: '2026-04-10',
+    isPublished: true,
+  },
+  {
+    id: 'blog-ferforje-nedir-nerelerde-kullanilir',
+    slug: 'ferforje-nedir-nerelerde-kullanilir',
+    category: 'Rehber & Nedir?',
+    title: 'Ferforje Nedir? Sanatsal Demir Kapı ve Korkuluk İmalatı',
+    excerpt: 'Ferforje nedir? Sıcak dövme demir sanatı, elektrostatik fırın boyası ve müstakil villalara zarafet katan bahçe kapıları ve korkuluklar.',
+    content: `Ferforje; Fransızca "fer forgé" kelimesinden dilimize geçmiş olup "dövülmüş demir" anlamına gelir. Yüksek ısıda yumuşatılan demirin örs üzerinde çekiç ve preslerle sanatsal motiflere dönüştürülmesi sanatıdır.
+
+## Ferforjenin Kullanım Alanları
+
+- **Villa Bahçe Giriş Kapıları:** Sürgülü, kanatlı veya motorlu ferforje ana giriş kapıları.
+- **Pencere Güvenlik Korkulukları:** Hırsızlığa karşı asırlık güvenlik sağlayan dekoratif pencere demirleri.
+- **Balkon ve Teras Korkulukları:** Dış cepheye estetik kimlik katan ferforje tırabzanlar.
+- **Döner ve Düz Merdiven Korkulukları:** İç ve dış mekan merdivenlerinde estetik güvenlik.
+
+## ARGEV Ferforje Üretim Kalitesi
+
+1. **Sıcak Dövme:** Döküm taklitleri değil, gerçek dövme demir detayları kullanılır.
+2. **Korozyon Önleyici Astar:** Dış ortamda paslanmayı engellemek için epoksi astar ve daldırma galvaniz uygulanır.
+3. **Elektrostatik Toz Fırın Boyası:** 200°C fırınlarda pişirilen boya, yağmur ve güneşten dökülmez veya solmaz.`,
+    coverImage: 'https://images.unsplash.com/photo-1558036117-15d82a90b9b1?auto=format&fit=crop&w=1200&q=85',
+    readingTimeMin: 4,
+    publishedAt: '2026-04-12',
+    isPublished: true,
+  },
 ];
 
 export const INITIAL_FAQS: FAQItem[] = [
@@ -1179,6 +1323,6 @@ export const INITIAL_SITE_SETTINGS: SiteSettings = {
   googleMapsUrl: 'https://share.google/hRm0NKr0D9ILdZyGQ',
   instagramUrl: 'https://www.instagram.com/argevyapiduzce/',
   kdvRate: 20,
-  heroPosterUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=85',
+  heroPosterUrl: '/celik-villa-aksam.jpg',
   defaultPriceValidityDays: 15,
 };

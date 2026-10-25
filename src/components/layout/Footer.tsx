@@ -23,9 +23,13 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
           {/* Column 1: Brand Info */}
           <div className="lg:col-span-2 flex flex-col gap-5">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-bronze to-bronze-dark flex items-center justify-center text-white shadow-md">
-                <Layers className="w-5 h-5 text-warm-white" />
+            <Link href="/" className="flex items-center gap-3.5 group">
+              <div className="w-14 h-14 rounded-full overflow-hidden border border-white/20 bg-navy/80 p-0.5 shadow-xl ring-2 ring-bronze/30 shrink-0 group-hover:scale-105 transition-transform">
+                <img
+                  src="/logo.png"
+                  alt="ARGEV Yapı Logo"
+                  className="w-full h-full object-contain rounded-full"
+                />
               </div>
               <div className="flex flex-col">
                 <span className="text-2xl font-bold tracking-wider text-white font-serif">

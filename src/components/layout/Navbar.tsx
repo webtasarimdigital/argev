@@ -55,9 +55,13 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-bronze to-bronze-dark flex items-center justify-center text-white shadow-md shadow-bronze/20 group-hover:scale-105 transition-transform">
-                <Layers className="w-5 h-5 text-warm-white" />
+            <Link href="/" className="flex items-center gap-3.5 group">
+              <div className="relative w-12 h-12 rounded-full overflow-hidden shadow-lg border border-white/20 bg-navy/80 p-0.5 group-hover:scale-105 transition-all duration-300 ring-2 ring-bronze/30 shrink-0">
+                <img
+                  src="/logo.png"
+                  alt="ARGEV Yapı Logo"
+                  className="w-full h-full object-contain rounded-full"
+                />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-bold tracking-wider text-white font-serif flex items-center gap-1.5">
@@ -154,11 +158,18 @@ export function Navbar() {
           <div className="fixed inset-y-0 right-0 max-w-xs w-full bg-navy-dark border-l border-white/10 p-6 shadow-2xl flex flex-col justify-between overflow-y-auto">
             <div>
               <div className="flex items-center justify-between pb-6 border-b border-white/10">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-md bg-bronze flex items-center justify-center text-white">
-                    <Shield className="w-4 h-4" />
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full overflow-hidden border border-white/20 bg-navy/80 p-0.5 ring-2 ring-bronze/30 shrink-0">
+                    <img
+                      src="/logo.png"
+                      alt="ARGEV Yapı Logo"
+                      className="w-full h-full object-contain rounded-full"
+                    />
                   </div>
-                  <span className="font-bold text-white tracking-wider font-serif">ARGEV YAPI</span>
+                  <div className="flex flex-col">
+                    <span className="font-bold text-white tracking-wider font-serif text-base">ARGEV YAPI</span>
+                    <span className="text-[9px] text-gray-400 uppercase tracking-widest font-medium">Düzce Çelik</span>
+                  </div>
                 </div>
                 <button
                   onClick={() => setIsMobileOpen(false)}

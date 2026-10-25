@@ -56,7 +56,7 @@ export function HeroSection() {
         <video
           ref={videoRef}
           src="/hero-yatay.mp4"
-          poster="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85"
+          poster="/celik-villa-aksam.jpg"
           autoPlay
           loop
           muted

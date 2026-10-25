@@ -16,10 +16,10 @@ const config: Config = {
           subtle: "#244463",
         },
         bronze: {
-          DEFAULT: "#866B55",
-          light: "#A88D77",
-          dark: "#6B523F",
-          muted: "#9C7E66",
+          DEFAULT: "#FF6B00",
+          light: "#FB923C",
+          dark: "#EA580C",
+          muted: "#F97316",
         },
         warm: {
           white: "#F3EFE8",
@@ -44,7 +44,7 @@ const config: Config = {
         luxury: "0 20px 40px -15px rgba(13, 26, 40, 0.12)",
         "luxury-lg": "0 25px 50px -12px rgba(13, 26, 40, 0.25)",
         card: "0 4px 20px -2px rgba(21, 40, 58, 0.06)",
-        "bronze-glow": "0 0 25px -5px rgba(134, 107, 85, 0.4)",
+        "bronze-glow": "0 0 25px -5px rgba(255, 107, 0, 0.45)",
       },
       keyframes: {
         float: {

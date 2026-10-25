@@ -183,6 +183,69 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           </div>
         </div>
 
+        {/* Detailed "Nedir?" SEO & Engineering Guide Section */}
+        <div className="mb-20 luxury-card p-8 sm:p-12 rounded-3xl bg-white border border-warm-border">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-8">
+              <span className="text-xs uppercase font-bold tracking-widest text-bronze block mb-2">
+                MÜHENDİSLİK VE YAPI REHBERİ
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-navy-dark mb-4">
+                {service.name} Nedir? Nasıl Üretilir ve Neden Tercih Edilir?
+              </h2>
+              <div className="text-sm text-gray-700 leading-relaxed space-y-4 font-light">
+                <p>
+                  <strong className="font-semibold text-navy-dark">{service.name}</strong>; ARGEV Yapı tesislerinde en yüksek kalite standartlarında, bilgisayar destekli CAD/CAM makinelerinde milimetrik hassasiyetle imal edilir. Şantiyede betonarme gibi aylarca bekleme, kalıp sökme veya donma riskleri yaşanmaz.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                  <div className="p-4 rounded-xl bg-warm-card border border-warm-border/60">
+                    <h4 className="font-serif font-bold text-navy-dark text-sm mb-1 flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                      1. Derece Deprem Güvencesi
+                    </h4>
+                    <p className="text-xs text-gray-600 leading-relaxed">
+                      Sünek çelik iskelet yer hareketini esneyerek sönümler, yıkıcı ivmeleri sıfırlar.
+                    </p>
+                  </div>
+                  <div className="p-4 rounded-xl bg-warm-card border border-warm-border/60">
+                    <h4 className="font-serif font-bold text-navy-dark text-sm mb-1 flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-bronze" />
+                      Hızlı ve Temiz Montaj
+                    </h4>
+                    <p className="text-xs text-gray-600 leading-relaxed">
+                      Fabrikada hazır üretilen parçalar arsanızda 35-45 günde anahtar teslim kurulur.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-4 flex flex-col gap-4 p-6 rounded-2xl bg-warm-card border border-warm-border">
+              <div className="flex items-center gap-2 text-navy-dark font-serif font-bold text-sm">
+                <Sparkles className="w-4 h-4 text-bronze" />
+                <span>Teknik Makale ve Detaylar</span>
+              </div>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                Bu hizmet türünün statik hesapları, yalıtım katmanları ve betonarmeyle mukayesesini blog rehberimizde okuyun.
+              </p>
+              <Link
+                href="/blog"
+                className="inline-flex items-center justify-between px-4 py-3 rounded-xl bg-navy text-white text-xs font-semibold hover:bg-navy-light transition-colors"
+              >
+                <span>İlgili "Nedir?" Rehberini Oku</span>
+                <ArrowRight className="w-4 h-4 text-bronze-light" />
+              </Link>
+              <Link
+                href={`/fiyat-hesaplama/${service.slug}`}
+                className="inline-flex items-center justify-between px-4 py-3 rounded-xl bg-gradient-to-r from-bronze to-bronze-dark text-white text-xs font-semibold shadow-md"
+              >
+                <span>Anlık Fiyat Hesapla</span>
+                <Calculator className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+
         {/* Custom Work & Extra Demands Consultation Card */}
         <div className="luxury-card p-8 rounded-3xl bg-gradient-to-r from-navy-dark via-navy to-navy-dark text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-luxury-lg border border-white/10">
           <div>
