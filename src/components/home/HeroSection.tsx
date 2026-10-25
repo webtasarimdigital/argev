@@ -113,11 +113,11 @@ export function HeroSection() {
           Milimetrik hassasiyette galvanizli çelik karkas, A+ ısı yalıtımı ve modern mimari estetik. Düzce fabrikamızda üretip arsanızda 45 günde anahtar teslim kuruyoruz.
         </p>
 
-        {/* Action CTAs */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+        {/* Action CTAs: On mobile, only 1 prominent button; on desktop all 3 */}
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto">
           <Link
             href="/fiyat-hesaplama"
-            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-bronze via-bronze-light to-bronze shadow-lg shadow-bronze/30 hover:shadow-bronze-glow hover:scale-[1.03] transition-all duration-300 shimmer-btn"
+            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-3.5 sm:py-4 rounded-xl text-sm sm:text-base font-semibold text-white bg-gradient-to-r from-bronze via-bronze-light to-bronze shadow-lg shadow-bronze/30 hover:shadow-bronze-glow hover:scale-[1.03] transition-all duration-300 shimmer-btn"
           >
             <Calculator className="w-5 h-5" />
             <span>Fiyatınızı Hesaplayın</span>
@@ -126,14 +126,14 @@ export function HeroSection() {
 
           <Link
             href="/projeler"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md hover:border-white/40 transition-all duration-300 shadow-md hover:scale-[1.02]"
+            className="hidden sm:flex w-full sm:w-auto items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md hover:border-white/40 transition-all duration-300 shadow-md hover:scale-[1.02]"
           >
             <span>Projelerimizi İnceleyin</span>
           </Link>
 
           <a
             href="tel:05413980081"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-sm font-semibold text-gray-200 hover:text-white bg-slate-900/60 hover:bg-slate-900/80 border border-white/15 backdrop-blur-md transition-all hover:border-bronze"
+            className="hidden sm:flex w-full sm:w-auto items-center justify-center gap-2 px-6 py-4 rounded-xl text-sm font-semibold text-gray-200 hover:text-white bg-slate-900/60 hover:bg-slate-900/80 border border-white/15 backdrop-blur-md transition-all hover:border-bronze"
             title="Düzce Merkez Ofis"
           >
             <Phone className="w-4 h-4 text-bronze-light" />

@@ -39,13 +39,11 @@ export default function AdminLayout({
 
   const menuItems = [
     { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+    { label: 'Hesaplayıcı & Fiyatlar', href: '/admin/hesaplayici', icon: Calculator },
     { label: 'Hizmet Yönetimi', href: '/admin/hizmetler', icon: Layers },
-    { label: 'Hesaplayıcı Editörü', href: '/admin/hesaplayici', icon: Calculator },
     { label: 'Parametrik Fiyatlar', href: '/admin/fiyatlar', icon: DollarSign },
     { label: 'Teklifler & Başvurular', href: '/admin/teklifler', icon: Users },
-    { label: 'İçerik Yönetimi', href: '/admin/icerik', icon: FolderOpen },
     { label: 'Site Ayarları', href: '/admin/ayarlar', icon: Settings },
-    { label: 'Güvenlik & Audit', href: '/admin/guvenlik', icon: ShieldAlert },
   ];
 
   return (
@@ -72,12 +70,12 @@ export default function AdminLayout({
               onClick={() => setSidebarOpen(false)}
               className="flex items-center gap-2.5"
             >
-              <div className="w-8 h-8 rounded-lg bg-[#FF6B00] flex items-center justify-center text-white font-bold text-sm shadow-md shadow-[#FF6B00]/20">
+              <div className="w-8 h-8 rounded-lg bg-[#D4560A] flex items-center justify-center text-white font-bold text-sm shadow-md shadow-[#D4560A]/20">
                 A
               </div>
               <div>
                 <span className="font-bold tracking-wider text-white text-sm block">ARGEV YAPI</span>
-                <span className="text-[10px] text-[#FF6B00] uppercase tracking-widest block font-medium">
+                <span className="text-[10px] text-[#D4560A] uppercase tracking-widest block font-medium">
                   YÖNETİM PANELİ
                 </span>
               </div>
@@ -108,7 +106,7 @@ export default function AdminLayout({
                   onClick={() => setSidebarOpen(false)}
                   className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                     isActive
-                      ? 'bg-[#FF6B00] text-white shadow-md shadow-[#FF6B00]/20'
+                      ? 'bg-[#D4560A] text-white shadow-md shadow-[#D4560A]/20'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
                   }`}
                 >
@@ -178,7 +176,7 @@ export default function AdminLayout({
                 <span className="text-xs font-bold text-white block">argev</span>
                 <span className="text-[10px] text-emerald-400 font-medium">Yönetici</span>
               </div>
-              <div className="w-8 h-8 rounded-full bg-[#FF6B00] flex items-center justify-center font-bold text-xs text-white shadow-md shadow-[#FF6B00]/20">
+              <div className="w-8 h-8 rounded-full bg-[#D4560A] flex items-center justify-center font-bold text-xs text-white shadow-md shadow-[#D4560A]/20">
                 A
               </div>
             </div>
@@ -194,7 +192,7 @@ export default function AdminLayout({
         <Link
           href="/admin"
           className={`flex flex-col items-center gap-0.5 py-1 px-3 rounded-lg text-[10px] font-medium transition-colors ${
-            pathname === '/admin' ? 'text-[#FF6B00]' : 'text-slate-400 hover:text-white'
+            pathname === '/admin' ? 'text-[#D4560A]' : 'text-slate-400 hover:text-white'
           }`}
         >
           <LayoutDashboard className="w-4 h-4" />
@@ -203,7 +201,7 @@ export default function AdminLayout({
         <Link
           href="/admin/teklifler"
           className={`flex flex-col items-center gap-0.5 py-1 px-3 rounded-lg text-[10px] font-medium transition-colors ${
-            pathname.startsWith('/admin/teklifler') ? 'text-[#FF6B00]' : 'text-slate-400 hover:text-white'
+            pathname.startsWith('/admin/teklifler') ? 'text-[#D4560A]' : 'text-slate-400 hover:text-white'
           }`}
         >
           <Users className="w-4 h-4" />
@@ -212,7 +210,7 @@ export default function AdminLayout({
         <Link
           href="/admin/fiyatlar"
           className={`flex flex-col items-center gap-0.5 py-1 px-3 rounded-lg text-[10px] font-medium transition-colors ${
-            pathname.startsWith('/admin/fiyatlar') ? 'text-[#FF6B00]' : 'text-slate-400 hover:text-white'
+            pathname.startsWith('/admin/fiyatlar') ? 'text-[#D4560A]' : 'text-slate-400 hover:text-white'
           }`}
         >
           <DollarSign className="w-4 h-4" />
@@ -221,7 +219,7 @@ export default function AdminLayout({
         <Link
           href="/admin/hizmetler"
           className={`flex flex-col items-center gap-0.5 py-1 px-3 rounded-lg text-[10px] font-medium transition-colors ${
-            pathname.startsWith('/admin/hizmetler') ? 'text-[#FF6B00]' : 'text-slate-400 hover:text-white'
+            pathname.startsWith('/admin/hizmetler') ? 'text-[#D4560A]' : 'text-slate-400 hover:text-white'
           }`}
         >
           <Layers className="w-4 h-4" />

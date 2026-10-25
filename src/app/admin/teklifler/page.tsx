@@ -167,7 +167,7 @@ export default function AdminTekliflerPage() {
             className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3 shadow-sm"
           >
             <div className="flex items-center justify-between">
-              <span className="font-mono font-bold text-xs text-[#FF6B00]">
+              <span className="font-mono font-bold text-xs text-[#D4560A]">
                 {lead.quoteCode}
               </span>
               <span
@@ -213,7 +213,7 @@ export default function AdminTekliflerPage() {
                 onClick={() => setSelectedLead(lead)}
                 className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs inline-flex items-center gap-1"
               >
-                <Eye className="w-3.5 h-3.5 text-[#FF6B00]" />
+                <Eye className="w-3.5 h-3.5 text-[#D4560A]" />
                 <span>İncele</span>
               </button>
             </div>

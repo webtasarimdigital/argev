@@ -15,13 +15,13 @@ export default async function FiyatHesaplamaPage() {
   const steps = await DataStore.getCalculatorSteps();
 
   return (
-    <div className="pt-20 pb-12 bg-warm-white min-h-screen">
+    <div className="pt-28 sm:pt-32 pb-12 bg-warm-white min-h-screen">
       {/* Compact Page Header */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center pt-2 pb-1">
-        <span className="text-[11px] uppercase font-bold tracking-widest text-bronze block">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center pt-2 pb-3">
+        <span className="text-[11px] uppercase font-bold tracking-widest text-bronze block mb-1">
           ŞEFFAF VE ANLIK MALİYET DÖKÜMÜ
         </span>
-        <h1 className="text-2xl sm:text-3xl font-serif font-bold text-navy-dark tracking-tight mt-1 mb-1.5">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-navy-dark tracking-tight mt-1 mb-2">
           Çelik Yapı Fiyat Hesaplayıcı
         </h1>
         <p className="text-xs sm:text-sm text-gray-600 max-w-xl mx-auto leading-relaxed">

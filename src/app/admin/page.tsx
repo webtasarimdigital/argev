@@ -99,7 +99,7 @@ export default async function AdminDashboardPage() {
           {leads.slice(0, 5).map((lead) => (
             <div key={lead.id} className="p-4 space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="font-mono font-bold text-xs text-[#FF6B00]">
+                <span className="font-mono font-bold text-xs text-[#D4560A]">
                   {lead.quoteCode}
                 </span>
                 <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-200">
@@ -125,7 +125,7 @@ export default async function AdminDashboardPage() {
                   className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs flex items-center gap-1"
                 >
                   <span>Detay</span>
-                  <ArrowRight className="w-3 h-3 text-[#FF6B00]" />
+                  <ArrowRight className="w-3 h-3 text-[#D4560A]" />
                 </Link>
               </div>
             </div>

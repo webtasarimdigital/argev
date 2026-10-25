@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
-import { StickyMobileBar } from '@/components/layout/StickyMobileBar';
+import { SiteLayoutWrapper } from '@/components/layout/SiteLayoutWrapper';
 
 export const metadata: Metadata = {
   title: 'ARGEV Yapı — Düzce Çelik Ev, Çelik Villa ve Depreme Dayanıklı Çelik Mimarisi',
@@ -111,10 +109,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col bg-warm-white text-gray-900 antialiased selection:bg-bronze selection:text-white">
-        <Navbar />
-        <main className="flex-1 pb-16 lg:pb-0">{children}</main>
-        <Footer />
-        <StickyMobileBar />
+        <SiteLayoutWrapper>{children}</SiteLayoutWrapper>
       </body>
     </html>
   );

@@ -306,6 +306,57 @@ export const DataStore = {
     }
   },
 
+  async createPricingRule(rule: PricingRule): Promise<PricingRule> {
+    const store = getMemoryStore();
+    const newRule: PricingRule = {
+      ...rule,
+      id: rule.id || `rule-${Date.now()}`,
+      code: rule.code || `PARAM_${Date.now()}`,
+      isActive: rule.isActive ?? true,
+      displayOrder: rule.displayOrder ?? (store.pricingRules.length + 1),
+    };
+    store.pricingRules.push(newRule);
+
+    const supabase = createAdminClient();
+    if (supabase) {
+      try {
+        await supabase.from('pricing_rules').insert({
+          id: newRule.id,
+          service_id: newRule.serviceId || null,
+          category: newRule.category,
+          code: newRule.code,
+          title: newRule.title,
+          description: newRule.description || '',
+          pricing_type: newRule.pricingType,
+          unit_label: newRule.unitLabel,
+          unit_price: newRule.unitPrice,
+          is_optional: newRule.isOptional ?? true,
+          is_active: newRule.isActive,
+          display_order: newRule.displayOrder,
+        });
+      } catch (err) {
+        console.error('Supabase createPricingRule error:', err);
+      }
+    }
+    return newRule;
+  },
+
+  async deletePricingRule(idOrCode: string): Promise<void> {
+    const store = getMemoryStore();
+    const idx = store.pricingRules.findIndex((r) => r.id === idOrCode || r.code === idOrCode);
+    if (idx !== -1) {
+      const removed = store.pricingRules.splice(idx, 1)[0];
+      const supabase = createAdminClient();
+      if (supabase) {
+        try {
+          await supabase.from('pricing_rules').delete().or(`id.eq.${removed.id},code.eq.${removed.code}`);
+        } catch (err) {
+          console.error('Supabase deletePricingRule error:', err);
+        }
+      }
+    }
+  },
+
   // Calculator Steps
   async getCalculatorSteps(): Promise<CalculatorStep[]> {
     return getMemoryStore().calculatorSteps;

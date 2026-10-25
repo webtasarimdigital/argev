@@ -5,8 +5,8 @@
 :root {
   --primary-navy: #15283A;
   --dark-navy: #0D1A28;
-  --bronze: #FF6B00;
-  --bronze-light: #FB923C;
+  --bronze: #D4560A;
+  --bronze-light: #E8651A;
   --warm-white: #F3EFE8;
   --card-bg: #FAF8F5;
   --border-color: #E4DCD3;
@@ -29,8 +29,8 @@ body {
 }
 
 .luxury-card:hover {
-  border-color: #FF6B00;
-  box-shadow: 0 16px 36px -4px rgba(255, 107, 0, 0.15);
+  border-color: #D4560A;
+  box-shadow: 0 16px 36px -4px rgba(212, 86, 10, 0.15);
 }
 
 .navy-gradient {
@@ -38,11 +38,11 @@ body {
 }
 
 .bronze-gradient {
-  background: linear-gradient(135deg, #FF6B00 0%, #EA580C 100%);
+  background: linear-gradient(135deg, #D4560A 0%, #A83E05 100%);
 }
 
 .bronze-text-gradient {
-  background: linear-gradient(135deg, #FF6B00 0%, #F97316 100%);
+  background: linear-gradient(135deg, #D4560A 0%, #E8651A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

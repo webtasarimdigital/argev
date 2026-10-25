@@ -74,14 +74,14 @@ export function Navbar() {
             </Link>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+            <nav className="hidden xl:flex items-center gap-0.5 2xl:gap-1">
               {navLinks.map((link) => {
                 const active = isActive(link.href);
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`px-3.5 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                    className={`px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap ${
                       active
                         ? 'text-white bg-white/10 font-semibold'
                         : link.highlight
@@ -96,7 +96,7 @@ export function Navbar() {
             </nav>
 
             {/* Header Right Actions */}
-            <div className="hidden md:flex items-center gap-3 xl:gap-4">
+            <div className="hidden lg:flex items-center gap-2 xl:gap-3 shrink-0">
               <a
                 href="https://www.instagram.com/argevyapiduzce/"
                 target="_blank"
@@ -115,12 +115,12 @@ export function Navbar() {
                 <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-bronze-light">
                   <Phone className="w-3.5 h-3.5" />
                 </div>
-                <span>0541 398 00 81</span>
+                <span className="hidden xl:inline whitespace-nowrap">0541 398 00 81</span>
               </a>
 
               <Link
                 href="/fiyat-hesaplama"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-bronze to-bronze-dark hover:from-bronze-light hover:to-bronze shadow-md shadow-bronze/20 hover:shadow-lg transition-all duration-200"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-bronze to-bronze-dark hover:from-bronze-light hover:to-bronze shadow-md shadow-bronze/20 hover:shadow-lg transition-all duration-200 whitespace-nowrap shrink-0"
               >
                 <Calculator className="w-4 h-4" />
                 <span>Teklif Hesapla</span>

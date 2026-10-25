@@ -40,7 +40,18 @@ export function CalculatorWizard({
   services,
   steps,
 }: CalculatorWizardProps) {
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  // If a service was pre-selected (from URL or card click), start on Step 1 (Proje Ölçüleri) directly!
+  const [currentStepIndex, setCurrentStepIndex] = useState(initialServiceSlug ? 1 : 0);
+  const wizardTopRef = React.useRef<HTMLDivElement>(null);
+
+  const goToStep = (idx: number) => {
+    setCurrentStepIndex(idx);
+    if (typeof window !== 'undefined') {
+      setTimeout(() => {
+        wizardTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+  };
 
   // All alternative demands/extras start at 0 or 'yok' (NO default cost additions)
   const [selections, setSelections] = useState<Record<string, any>>({
@@ -254,7 +265,7 @@ export function CalculatorWizard({
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-16">
+    <div ref={wizardTopRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-16 scroll-mt-24">
       {/* Top Progress Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
@@ -283,7 +294,7 @@ export function CalculatorWizard({
             return (
               <button
                 key={step.id}
-                onClick={() => setCurrentStepIndex(idx)}
+                onClick={() => goToStep(idx)}
                 className={`flex items-center gap-1 py-1.5 px-3 rounded-lg transition-colors whitespace-nowrap ${
                   isCurrent
                     ? 'bg-navy text-white font-semibold shadow-sm'
@@ -304,7 +315,7 @@ export function CalculatorWizard({
             );
           })}
           <button
-            onClick={() => setCurrentStepIndex(steps.length)}
+            onClick={() => goToStep(steps.length)}
             className={`flex items-center gap-1 py-1.5 px-3 rounded-lg transition-colors whitespace-nowrap ${
               isReviewStep
                 ? 'bg-navy text-white font-semibold shadow-sm'
@@ -379,7 +390,12 @@ export function CalculatorWizard({
                         return (
                           <div
                             key={opt.id}
-                            onClick={() => updateSelection(field.fieldKey, opt.optionKey)}
+                            onClick={() => {
+                              updateSelection(field.fieldKey, opt.optionKey);
+                              if (field.fieldKey === 'service_slug') {
+                                goToStep(1);
+                              }
+                            }}
                             className={`p-4 rounded-xl cursor-pointer border-2 transition-all flex flex-col justify-between ${
                               isSelected
                                 ? 'border-bronze bg-amber-50/20 shadow-sm'
@@ -442,7 +458,7 @@ export function CalculatorWizard({
                             onClick={() => updateSelection('floor_count', fc.val)}
                             className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all flex items-center gap-3 ${
                               isSelected
-                                ? 'border-[#FF6B00] bg-orange-50/30 shadow-sm'
+                                ? 'border-[#D4560A] bg-orange-50/30 shadow-sm'
                                 : 'border-gray-200 hover:border-gray-300 bg-white'
                             }`}
                           >
@@ -455,7 +471,7 @@ export function CalculatorWizard({
                             </div>
                             <div
                               className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
-                                isSelected ? 'border-[#FF6B00] bg-[#FF6B00] text-white' : 'border-gray-300'
+                                isSelected ? 'border-[#D4560A] bg-[#D4560A] text-white' : 'border-gray-300'
                               }`}
                             >
                               {isSelected && <Check className="w-3 h-3" />}
@@ -476,11 +492,11 @@ export function CalculatorWizard({
                             onClick={() => updateSelection('room_count', rc)}
                             className={`py-3 px-3 rounded-xl border-2 font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
                               isSelected
-                                ? 'border-[#FF6B00] bg-orange-50/40 text-navy-dark shadow-sm'
+                                ? 'border-[#D4560A] bg-orange-50/40 text-navy-dark shadow-sm'
                                 : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
                             }`}
                           >
-                            <Home className={`w-4 h-4 ${isSelected ? 'text-[#FF6B00]' : 'text-gray-400'}`} />
+                            <Home className={`w-4 h-4 ${isSelected ? 'text-[#D4560A]' : 'text-gray-400'}`} />
                             <span>{rc}</span>
                           </button>
                         );
@@ -571,7 +587,7 @@ export function CalculatorWizard({
             <button
               type="button"
               disabled={currentStepIndex === 0}
-              onClick={() => setCurrentStepIndex((prev) => Math.max(0, prev - 1))}
+              onClick={() => goToStep(Math.max(0, currentStepIndex - 1))}
               className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-transparent"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -580,7 +596,7 @@ export function CalculatorWizard({
 
             <button
               type="button"
-              onClick={() => setCurrentStepIndex((prev) => prev + 1)}
+              onClick={() => goToStep(currentStepIndex + 1)}
               className="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-navy hover:bg-navy-light text-white text-sm font-semibold shadow-md transition-all"
             >
               <span>{currentStepIndex === steps.length - 1 ? 'Teklifimi Hesapla & Özeti Gör' : 'Sonraki Adım'}</span>
@@ -609,7 +625,7 @@ export function CalculatorWizard({
 
               <button
                 type="button"
-                onClick={() => setCurrentStepIndex(0)}
+                onClick={() => goToStep(0)}
                 className="self-start sm:self-auto flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-gray-300 text-xs font-semibold text-gray-600 hover:bg-gray-50"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -842,7 +858,7 @@ export function CalculatorWizard({
               <div className="mt-8 pt-6 border-t border-gray-200 flex items-center justify-between">
                 <button
                   type="button"
-                  onClick={() => setCurrentStepIndex(steps.length - 1)}
+                  onClick={() => goToStep(steps.length - 1)}
                   className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50"
                 >
                   <ArrowLeft className="w-4 h-4" />
@@ -860,7 +876,7 @@ export function CalculatorWizard({
         <div className="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden">
           <div className="bg-white px-4 py-3 border-b border-gray-100 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-lg bg-orange-100 text-[#FF6B00] flex items-center justify-center">
+              <div className="w-6 h-6 rounded-lg bg-orange-100 text-[#D4560A] flex items-center justify-center">
                 <Home className="w-3.5 h-3.5" />
               </div>
               <h3 className="font-bold text-sm text-gray-900">Seçilen Yapı Önizlemesi</h3>
@@ -881,7 +897,7 @@ export function CalculatorWizard({
               <span className="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-[11px] font-medium border border-white/10">
                 {currentService.name}
               </span>
-              <span className="bg-[#FF6B00] text-white px-2 py-1 rounded text-[11px] font-bold shadow">
+              <span className="bg-[#D4560A] text-white px-2 py-1 rounded text-[11px] font-bold shadow">
                 {selections.building_m2 || 0} m²
               </span>
             </div>
@@ -997,7 +1013,7 @@ export function CalculatorWizard({
               <span className="text-[10px] text-gray-500">KDV (%20) ve Montaj Dahil</span>
             </div>
             <div className="text-right">
-              <span className="text-2xl sm:text-3xl font-bold font-serif text-[#FF6B00]">
+              <span className="text-2xl sm:text-3xl font-bold font-serif text-[#D4560A]">
                 {formatCurrency(calculationResult?.grandTotal || 0)}
               </span>
             </div>
@@ -1010,7 +1026,7 @@ export function CalculatorWizard({
     <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0F172A]/95 backdrop-blur-md border-t border-gray-800 p-3 px-4 flex items-center justify-between text-white shadow-2xl">
       <div>
         <span className="text-[10px] uppercase text-gray-400 block font-semibold">Tahmini Tutar</span>
-        <span className="text-lg font-bold text-[#FF6B00] font-serif">
+        <span className="text-lg font-bold text-[#D4560A] font-serif">
           {formatCurrency(calculationResult?.grandTotal || 0)}
         </span>
       </div>
@@ -1021,7 +1037,7 @@ export function CalculatorWizard({
             setCurrentStepIndex(steps.length);
           }
         }}
-        className="px-4 py-2 rounded-lg bg-[#FF6B00] hover:bg-orange-600 text-white font-semibold text-xs flex items-center gap-1.5 shadow"
+        className="px-4 py-2 rounded-lg bg-[#D4560A] hover:bg-orange-600 text-white font-semibold text-xs flex items-center gap-1.5 shadow"
       >
         <span>{isReviewStep ? 'Teklifi Al' : 'Teklif Dökümü'}</span>
         <ArrowRight className="w-3.5 h-3.5" />
