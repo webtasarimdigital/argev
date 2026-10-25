@@ -247,10 +247,10 @@ export function CalculatorWizard({
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 lg:py-12">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-2 pb-12">
       {/* Top Progress Header */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between text-xs sm:text-sm text-gray-500 mb-3">
+      <div className="mb-4">
+        <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
           <span className="font-semibold text-navy flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-bronze" />
             Adım {currentStepIndex + 1} / {totalStepsCount}
@@ -261,7 +261,7 @@ export function CalculatorWizard({
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-bronze to-navy transition-all duration-300 rounded-full"
             style={{ width: `${((currentStepIndex + 1) / totalStepsCount) * 100}%` }}
@@ -269,7 +269,7 @@ export function CalculatorWizard({
         </div>
 
         {/* Horizontal Step Tabs on larger screens */}
-        <div className="hidden sm:flex items-center justify-between mt-4 overflow-x-auto pb-2 gap-1.5 text-xs">
+        <div className="hidden sm:flex items-center justify-between mt-2.5 overflow-x-auto pb-1 gap-1 text-[11px]">
           {steps.map((step, idx) => {
             const isDone = idx < currentStepIndex;
             const isCurrent = idx === currentStepIndex;
@@ -314,21 +314,21 @@ export function CalculatorWizard({
 
       {/* Focused Step Card (No Live Summary distraction during selection) */}
       {!isReviewStep && currentStep && (
-        <div className="luxury-card p-6 sm:p-8 rounded-2xl">
-          <div className="mb-6">
-            <span className="text-xs uppercase font-bold tracking-wider text-bronze">
+        <div className="luxury-card p-5 sm:p-7 rounded-2xl shadow-card">
+          <div className="mb-4">
+            <span className="text-[11px] uppercase font-bold tracking-wider text-bronze">
               {currentService.name} İÇİN ÖZELLEŞTİRME
             </span>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-navy-dark mt-1">
+            <h2 className="text-lg sm:text-xl font-serif font-bold text-navy-dark mt-0.5">
               {currentStep.title}
             </h2>
             {currentStep.subtitle && (
-              <p className="text-sm text-gray-500 mt-1">{currentStep.subtitle}</p>
+              <p className="text-xs text-gray-500 mt-0.5">{currentStep.subtitle}</p>
             )}
           </div>
 
           {/* Reassurance Banner */}
-          <div className="mb-6 p-3.5 rounded-xl bg-warm-white border border-warm-border text-xs text-gray-600 flex items-center gap-2">
+          <div className="mb-4 p-2.5 rounded-xl bg-warm-white border border-warm-border text-xs text-gray-600 flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-bronze shrink-0" />
             <span>
               Hesaplanan fiyatlara nakliye, montaj ve kurulum ücretleri dahildir. Alternatif taleplerinizi seçtikçe fiyatınız şekillenir.
@@ -336,7 +336,7 @@ export function CalculatorWizard({
           </div>
 
           {/* Dynamic Step Fields */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             {currentStep.fields.map((field) => {
               // Dependency condition check (e.g. if kitchen is 'yok', hide cabinet sizes)
               if (field.dependencyCondition) {
