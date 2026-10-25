@@ -101,21 +101,102 @@ function getMemoryStore() {
   return global.__argev_store;
 }
 
+function mapServiceRow(row: any, fallback?: Service): Service {
+  return {
+    id: row.id || fallback?.id || '',
+    slug: row.slug || fallback?.slug || '',
+    name: row.name || fallback?.name || '',
+    shortTitle: row.short_title || row.shortTitle || fallback?.shortTitle || row.name || '',
+    summary: row.summary || fallback?.summary || '',
+    description: row.description || fallback?.description || '',
+    iconName: row.icon_name || row.iconName || fallback?.iconName || 'Home',
+    featuredImage: row.featured_image || row.featuredImage || fallback?.featuredImage || '',
+    pricingType: row.pricing_type || row.pricingType || fallback?.pricingType || 'm2',
+    baseM2Price: Number(row.base_m2_price ?? row.baseM2Price ?? fallback?.baseM2Price ?? 0),
+    minM2: Number(row.min_m2 ?? row.minM2 ?? fallback?.minM2 ?? 40),
+    maxM2: Number(row.max_m2 ?? row.maxM2 ?? fallback?.maxM2 ?? 500),
+    defaultTurnaroundDays: Number(row.default_turnaround_days ?? row.defaultTurnaroundDays ?? fallback?.defaultTurnaroundDays ?? 45),
+    calculatorActive: row.calculator_active ?? row.calculatorActive ?? fallback?.calculatorActive ?? true,
+    isActive: row.is_active ?? row.isActive ?? fallback?.isActive ?? true,
+    displayOrder: Number(row.display_order ?? row.displayOrder ?? fallback?.displayOrder ?? 0),
+    packages: fallback?.packages || [],
+  };
+}
+
+function mapPricingRuleRow(row: any, fallback?: PricingRule): PricingRule {
+  return {
+    id: row.id || fallback?.id || '',
+    serviceId: row.service_id || row.serviceId || fallback?.serviceId,
+    category: row.category || fallback?.category || '',
+    code: row.code || fallback?.code || '',
+    title: row.title || fallback?.title || '',
+    description: row.description || fallback?.description || '',
+    pricingType: row.pricing_type || row.pricingType || fallback?.pricingType || 'fixed',
+    unitLabel: row.unit_label || row.unitLabel || fallback?.unitLabel || '₺',
+    unitPrice: Number(row.unit_price ?? row.unitPrice ?? fallback?.unitPrice ?? 0),
+    isOptional: row.is_optional ?? row.isOptional ?? fallback?.isOptional ?? true,
+    isActive: row.is_active ?? row.isActive ?? fallback?.isActive ?? true,
+    displayOrder: Number(row.display_order ?? row.displayOrder ?? fallback?.displayOrder ?? 0),
+  };
+}
+
+function mapSettingsRow(row: any, fallback: SiteSettings): SiteSettings {
+  return {
+    companyName: row.company_name || row.companyName || fallback.companyName,
+    legalName: row.legal_name || row.legalName || fallback.legalName,
+    phone: row.phone || fallback.phone,
+    whatsappNumber: row.whatsapp_number || row.whatsappNumber || fallback.whatsappNumber,
+    email: row.email || fallback.email,
+    address: row.address || fallback.address,
+    googleMapsUrl: row.google_maps_url || row.googleMapsUrl || fallback.googleMapsUrl,
+    instagramUrl: row.instagram_url || row.instagramUrl || fallback.instagramUrl,
+    kdvRate: Number(row.kdv_rate ?? row.kdvRate ?? fallback.kdvRate ?? 20),
+    heroPosterUrl: row.hero_poster_url || row.heroPosterUrl || fallback.heroPosterUrl,
+    heroVideoUrl: row.hero_video_url || row.heroVideoUrl || fallback.heroVideoUrl,
+    defaultPriceValidityDays: Number(row.default_price_validity_days ?? row.defaultPriceValidityDays ?? fallback.defaultPriceValidityDays ?? 15),
+  };
+}
+
+function mapLeadRow(row: any, quote?: QuoteCalculationResult): Lead {
+  return {
+    id: row.id,
+    quoteId: row.quote_id || row.quote_code,
+    quoteCode: row.quote_code,
+    fullName: row.full_name,
+    phone: row.phone,
+    email: row.email || undefined,
+    city: row.city,
+    district: row.district || undefined,
+    notes: row.notes || undefined,
+    channel: row.channel,
+    status: row.status,
+    adminNotes: row.admin_notes || undefined,
+    kvkkConsent: row.kvkk_consent ?? true,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    quoteSnapshot: quote || (row.quote_snapshot ? (row.quote_snapshot as QuoteCalculationResult) : undefined),
+  };
+}
+
 export const DataStore = {
   // Services
   async getServices(): Promise<Service[]> {
+    const memory = getMemoryStore().services;
     const supabase = createAdminClient();
     if (supabase) {
       try {
         const { data, error } = await supabase.from('services').select('*').order('display_order');
         if (!error && data && data.length > 0) {
-          return data as any;
+          return data.map((row) => {
+            const fb = memory.find((m) => m.slug === row.slug);
+            return mapServiceRow(row, fb);
+          });
         }
       } catch (err) {
-        console.warn('Supabase fetch failed, falling back to local store:', err);
+        console.warn('Supabase fetch services failed, falling back to local store:', err);
       }
     }
-    return getMemoryStore().services;
+    return memory;
   },
 
   async getServiceBySlug(slug: string): Promise<Service | undefined> {
@@ -125,7 +206,7 @@ export const DataStore = {
 
   async updateService(updated: Service): Promise<void> {
     const store = getMemoryStore();
-    const idx = store.services.findIndex((s) => s.id === updated.id);
+    const idx = store.services.findIndex((s) => s.id === updated.id || s.slug === updated.slug);
     if (idx !== -1) {
       const old = store.services[idx];
       store.services[idx] = updated;
@@ -139,22 +220,51 @@ export const DataStore = {
         timestamp: new Date().toISOString(),
       });
     }
+
+    const supabase = createAdminClient();
+    if (supabase) {
+      try {
+        await supabase
+          .from('services')
+          .update({
+            base_m2_price: updated.baseM2Price,
+            name: updated.name,
+            short_title: updated.shortTitle,
+            summary: updated.summary,
+            description: updated.description,
+            min_m2: updated.minM2,
+            max_m2: updated.maxM2,
+            default_turnaround_days: updated.defaultTurnaroundDays,
+            is_active: updated.isActive,
+            calculator_active: updated.calculatorActive,
+            display_order: updated.displayOrder,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('slug', updated.slug);
+      } catch (err) {
+        console.error('Supabase updateService error:', err);
+      }
+    }
   },
 
   // Pricing Rules
   async getPricingRules(): Promise<PricingRule[]> {
+    const memory = getMemoryStore().pricingRules;
     const supabase = createAdminClient();
     if (supabase) {
       try {
         const { data, error } = await supabase.from('pricing_rules').select('*').order('display_order');
         if (!error && data && data.length > 0) {
-          return data as any;
+          return data.map((row) => {
+            const fb = memory.find((m) => m.code === row.code);
+            return mapPricingRuleRow(row, fb);
+          });
         }
       } catch (err) {
-        console.warn('Supabase fetch failed, falling back to local store:', err);
+        console.warn('Supabase fetch pricing rules failed, falling back to local store:', err);
       }
     }
-    return getMemoryStore().pricingRules;
+    return memory;
   },
 
   async updatePricingRule(updated: PricingRule): Promise<void> {
@@ -172,6 +282,27 @@ export const DataStore = {
         newValue: { unitPrice: updated.unitPrice, type: updated.pricingType },
         timestamp: new Date().toISOString(),
       });
+    }
+
+    const supabase = createAdminClient();
+    if (supabase) {
+      try {
+        await supabase
+          .from('pricing_rules')
+          .update({
+            unit_price: updated.unitPrice,
+            pricing_type: updated.pricingType,
+            unit_label: updated.unitLabel,
+            title: updated.title,
+            description: updated.description,
+            is_active: updated.isActive,
+            display_order: updated.displayOrder,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('code', updated.code);
+      } catch (err) {
+        console.error('Supabase updatePricingRule error:', err);
+      }
     }
   },
 
@@ -215,7 +346,19 @@ export const DataStore = {
 
   // Site Settings
   async getSiteSettings(): Promise<SiteSettings> {
-    return getMemoryStore().siteSettings;
+    const memory = getMemoryStore().siteSettings;
+    const supabase = createAdminClient();
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.from('site_settings').select('*').limit(1).single();
+        if (!error && data) {
+          return mapSettingsRow(data, memory);
+        }
+      } catch (err) {
+        console.warn('Supabase fetch site settings failed:', err);
+      }
+    }
+    return memory;
   },
 
   async updateSiteSettings(settings: SiteSettings): Promise<void> {
@@ -228,6 +371,31 @@ export const DataStore = {
       target: 'Site Ayarları',
       timestamp: new Date().toISOString(),
     });
+
+    const supabase = createAdminClient();
+    if (supabase) {
+      try {
+        await supabase
+          .from('site_settings')
+          .update({
+            company_name: settings.companyName,
+            legal_name: settings.legalName,
+            phone: settings.phone,
+            whatsapp_number: settings.whatsappNumber,
+            email: settings.email,
+            address: settings.address,
+            google_maps_url: settings.googleMapsUrl,
+            instagram_url: settings.instagramUrl,
+            kdv_rate: settings.kdvRate,
+            hero_poster_url: settings.heroPosterUrl,
+            default_price_validity_days: settings.defaultPriceValidityDays,
+            updated_at: new Date().toISOString(),
+          })
+          .neq('id', '00000000-0000-0000-0000-000000000000');
+      } catch (err) {
+        console.error('Supabase updateSiteSettings error:', err);
+      }
+    }
   },
 
   // Leads & Quotes
@@ -245,8 +413,67 @@ export const DataStore = {
     const store = getMemoryStore();
     store.quotes.unshift(params.quote);
 
+    let savedLeadId = `lead-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+
+    const supabase = createAdminClient();
+    if (supabase) {
+      try {
+        const { data: quoteData, error: qErr } = await supabase
+          .from('quotes')
+          .insert({
+            quote_code: params.quote.quoteCode,
+            service_name: params.quote.serviceName,
+            building_m2: params.quote.buildingM2,
+            package_name: params.quote.packageTitle,
+            user_selections: params.quote,
+            pricing_snapshot: params.quote.items,
+            base_price: params.quote.basePrice,
+            options_total: params.quote.optionsTotal,
+            shipping_total: params.quote.shippingTotal,
+            subtotal: params.quote.subtotal,
+            kdv_rate: params.quote.kdvRate,
+            kdv_total: params.quote.kdvTotal,
+            grand_total: params.quote.grandTotal,
+            has_quote_only_items: params.quote.hasQuoteOnlyItems,
+          })
+          .select()
+          .single();
+
+        if (qErr) {
+          console.warn('Supabase quote insert error:', qErr);
+        }
+
+        const { data: leadData, error: lErr } = await supabase
+          .from('leads')
+          .insert({
+            quote_id: quoteData?.id || null,
+            quote_code: params.quote.quoteCode,
+            full_name: params.fullName,
+            phone: params.phone,
+            email: params.email || null,
+            city: params.city,
+            district: params.district || null,
+            channel: params.channel,
+            status: 'new',
+            notes: params.notes || null,
+            kvkk_consent: params.kvkkConsent,
+          })
+          .select()
+          .single();
+
+        if (lErr) {
+          console.warn('Supabase lead insert error:', lErr);
+        }
+        if (leadData?.id) {
+          savedLeadId = leadData.id;
+        }
+      } catch (e) {
+        console.warn('Supabase remote write error:', e);
+      }
+    }
+
     const newLead: Lead = {
-      id: `lead-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      id: savedLeadId,
       quoteId: params.quote.quoteCode,
       quoteCode: params.quote.quoteCode,
       fullName: params.fullName,
@@ -264,75 +491,99 @@ export const DataStore = {
     };
 
     store.leads.unshift(newLead);
-
-    // If Supabase is active, also asynchronously persist to Supabase
-    const supabase = createAdminClient();
-    if (supabase) {
-      try {
-        await supabase.from('quotes').insert({
-          quote_code: params.quote.quoteCode,
-          service_name: params.quote.serviceName,
-          building_m2: params.quote.buildingM2,
-          package_name: params.quote.packageTitle,
-          user_selections: params.quote,
-          pricing_snapshot: params.quote.items,
-          base_price: params.quote.basePrice,
-          options_total: params.quote.optionsTotal,
-          shipping_total: params.quote.shippingTotal,
-          subtotal: params.quote.subtotal,
-          kdv_rate: params.quote.kdvRate,
-          kdv_total: params.quote.kdvTotal,
-          grand_total: params.quote.grandTotal,
-          has_quote_only_items: params.quote.hasQuoteOnlyItems,
-        });
-
-        await supabase.from('leads').insert({
-          quote_code: params.quote.quoteCode,
-          full_name: params.fullName,
-          phone: params.phone,
-          email: params.email,
-          city: params.city,
-          district: params.district,
-          channel: params.channel,
-          status: 'new',
-          notes: params.notes,
-          kvkk_consent: params.kvkkConsent,
-        });
-      } catch (e) {
-        console.warn('Supabase remote write error:', e);
-      }
-    }
-
     return { lead: newLead, quote: params.quote };
   },
 
   async getLeads(): Promise<Lead[]> {
+    const supabase = createAdminClient();
+    if (supabase) {
+      try {
+        const { data: leadRows, error: leadError } = await supabase
+          .from('leads')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (!leadError && leadRows && leadRows.length > 0) {
+          const quoteCodes = leadRows.map((l) => l.quote_code).filter(Boolean);
+          const { data: quoteRows } = await supabase
+            .from('quotes')
+            .select('*')
+            .in('quote_code', quoteCodes);
+
+          const quoteMap = new Map<string, QuoteCalculationResult>();
+          if (quoteRows) {
+            quoteRows.forEach((q) => {
+              quoteMap.set(q.quote_code, {
+                quoteCode: q.quote_code,
+                serviceName: q.service_name,
+                packageTitle: q.package_name,
+                buildingM2: Number(q.building_m2),
+                basePrice: Number(q.base_price),
+                optionsTotal: Number(q.options_total),
+                shippingTotal: Number(q.shipping_total),
+                subtotal: Number(q.subtotal),
+                kdvRate: Number(q.kdv_rate),
+                kdvTotal: Number(q.kdv_total),
+                grandTotal: Number(q.grand_total),
+                hasQuoteOnlyItems: q.has_quote_only_items ?? false,
+                quoteOnlyCount: q.has_quote_only_items ? 1 : 0,
+                items: q.pricing_snapshot || [],
+                timestamp: q.created_at || new Date().toISOString(),
+              });
+            });
+          }
+
+          return leadRows.map((row) => mapLeadRow(row, quoteMap.get(row.quote_code)));
+        }
+      } catch (err) {
+        console.warn('Supabase getLeads error, falling back:', err);
+      }
+    }
     return getMemoryStore().leads;
   },
 
   async updateLeadStatus(id: string, status: LeadStatus, adminNotes?: string): Promise<Lead | null> {
     const store = getMemoryStore();
-    const lead = store.leads.find((l) => l.id === id);
-    if (!lead) return null;
+    const supabase = createAdminClient();
 
-    const oldStatus = lead.status;
-    lead.status = status;
-    lead.updatedAt = new Date().toISOString();
-    if (adminNotes !== undefined) {
-      lead.adminNotes = adminNotes;
+    if (supabase) {
+      try {
+        const updateData: any = {
+          status,
+          updated_at: new Date().toISOString(),
+        };
+        if (adminNotes !== undefined) {
+          updateData.admin_notes = adminNotes;
+        }
+        await supabase.from('leads').update(updateData).eq('id', id);
+      } catch (err) {
+        console.error('Supabase updateLeadStatus error:', err);
+      }
     }
 
-    store.auditLogs.unshift({
-      id: `log-${Date.now()}`,
-      actor: 'Admin',
-      action: 'Başvuru Durumu Güncelleme',
-      target: `${lead.fullName} (${lead.quoteCode})`,
-      oldValue: oldStatus,
-      newValue: status,
-      timestamp: new Date().toISOString(),
-    });
+    const lead = store.leads.find((l) => l.id === id);
+    if (lead) {
+      const oldStatus = lead.status;
+      lead.status = status;
+      lead.updatedAt = new Date().toISOString();
+      if (adminNotes !== undefined) {
+        lead.adminNotes = adminNotes;
+      }
 
-    return lead;
+      store.auditLogs.unshift({
+        id: `log-${Date.now()}`,
+        actor: 'Admin',
+        action: 'Başvuru Durumu Güncelleme',
+        target: `${lead.fullName} (${lead.quoteCode})`,
+        oldValue: oldStatus,
+        newValue: status,
+        timestamp: new Date().toISOString(),
+      });
+
+      return lead;
+    }
+
+    return null;
   },
 
   async getAuditLogs(): Promise<AuditLog[]> {

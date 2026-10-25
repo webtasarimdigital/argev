@@ -181,7 +181,25 @@ export default function AdminTekliflerPage() {
                   </td>
                   <td className="px-5 py-3.5">
                     <span className="font-semibold text-white block">{lead.fullName}</span>
-                    <span className="text-slate-400">{lead.phone}</span>
+                    <div className="flex items-center gap-2 mt-1">
+                      <a
+                        href={`tel:${lead.phone.replace(/\s+/g, '')}`}
+                        className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 font-medium hover:underline text-[11px]"
+                        title="Hemen Ara"
+                      >
+                        <Phone className="w-3 h-3" />
+                        <span>{lead.phone}</span>
+                      </a>
+                      <a
+                        href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=Merhaba%20${encodeURIComponent(lead.fullName)},%20ARGEV%20Yapı'dan%20${lead.quoteCode}%20nolu%20çelik%20yapı%20teklifiniz%20için%20ulaşıyorum.`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 hover:bg-emerald-900 transition-colors"
+                        title="WhatsApp Mesajı Gönder"
+                      >
+                        WhatsApp
+                      </a>
+                    </div>
                   </td>
                   <td className="px-5 py-3.5">
                     {lead.city} {lead.district ? `/ ${lead.district}` : ''}
@@ -254,10 +272,24 @@ export default function AdminTekliflerPage() {
             {/* Customer Details */}
             <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-slate-950 border border-slate-800 mb-6 text-xs">
               <div>
-                <span className="text-slate-500 block">Telefon:</span>
-                <a href={`tel:${selectedLead.phone}`} className="font-semibold text-white hover:underline">
-                  {selectedLead.phone}
-                </a>
+                <span className="text-slate-500 block mb-1">Müşteri Telefonu:</span>
+                <div className="flex items-center gap-2">
+                  <a
+                    href={`tel:${selectedLead.phone.replace(/\s+/g, '')}`}
+                    className="font-bold text-emerald-400 hover:underline flex items-center gap-1.5 text-sm"
+                  >
+                    <Phone className="w-4 h-4" />
+                    <span>{selectedLead.phone}</span>
+                  </a>
+                  <a
+                    href={`https://wa.me/${selectedLead.phone.replace(/[^0-9]/g, '')}?text=Merhaba%20${encodeURIComponent(selectedLead.fullName)},%20ARGEV%20Yapı'dan%20${selectedLead.quoteCode}%20nolu%20çelik%20yapı%20teklifiniz%20için%20ulaşıyorum.`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-semibold flex items-center gap-1 shadow-sm"
+                  >
+                    WhatsApp ile İletişime Geç
+                  </a>
+                </div>
               </div>
               <div>
                 <span className="text-slate-500 block">E-Posta:</span>
