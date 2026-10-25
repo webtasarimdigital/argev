@@ -1,5 +1,4 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/utils/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
   try {
@@ -14,7 +13,11 @@ export async function middleware(request: NextRequest) {
       }
     }
 
-    return createClient(request);
+    return NextResponse.next({
+      request: {
+        headers: request.headers,
+      },
+    });
   } catch (error) {
     // Fail open safely — never crash entire website with 500
     return NextResponse.next({
