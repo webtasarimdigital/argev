@@ -20,6 +20,13 @@ import {
   FileText,
   Calculator,
   RotateCcw,
+  Home,
+  Maximize2,
+  Tag,
+  Layers,
+  MapPin,
+  Building2,
+  Sparkles,
 } from 'lucide-react';
 
 interface CalculatorWizardProps {
@@ -247,29 +254,29 @@ export function CalculatorWizard({
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-2 pb-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-16">
       {/* Top Progress Header */}
-      <div className="mb-4">
+      <div className="mb-6">
         <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
           <span className="font-semibold text-navy flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-bronze" />
+            <span className="w-2.5 h-2.5 rounded-full bg-bronze animate-pulse" />
             Adım {currentStepIndex + 1} / {totalStepsCount}
           </span>
           <span className="font-medium text-gray-700">
-            {isReviewStep ? 'Teklif Özeti & İletişim' : currentStep?.shortTitle}
+            {isReviewStep ? 'Teklif Özeti & İletişim' : currentStep?.title}
           </span>
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-bronze to-navy transition-all duration-300 rounded-full"
+            className="h-full bg-gradient-to-r from-bronze to-orange-600 transition-all duration-300 rounded-full"
             style={{ width: `${((currentStepIndex + 1) / totalStepsCount) * 100}%` }}
           />
         </div>
 
         {/* Horizontal Step Tabs on larger screens */}
-        <div className="hidden sm:flex items-center justify-between mt-2.5 overflow-x-auto pb-1 gap-1 text-[11px]">
+        <div className="hidden sm:flex items-center justify-between mt-3 overflow-x-auto pb-1 gap-1 text-[11px]">
           {steps.map((step, idx) => {
             const isDone = idx < currentStepIndex;
             const isCurrent = idx === currentStepIndex;
@@ -277,12 +284,12 @@ export function CalculatorWizard({
               <button
                 key={step.id}
                 onClick={() => setCurrentStepIndex(idx)}
-                className={`flex items-center gap-1 py-1 px-2 rounded-md transition-colors whitespace-nowrap ${
+                className={`flex items-center gap-1 py-1.5 px-3 rounded-lg transition-colors whitespace-nowrap ${
                   isCurrent
-                    ? 'bg-navy text-white font-semibold'
+                    ? 'bg-navy text-white font-semibold shadow-sm'
                     : isDone
-                    ? 'text-emerald-700 hover:bg-emerald-50'
-                    : 'text-gray-400 hover:text-gray-700'
+                    ? 'text-emerald-700 bg-emerald-50/60 hover:bg-emerald-50'
+                    : 'text-gray-400 hover:text-gray-700 bg-gray-50'
                 }`}
               >
                 {isDone ? (
@@ -292,16 +299,16 @@ export function CalculatorWizard({
                     {idx + 1}
                   </span>
                 )}
-                <span className="hidden md:inline">{step.shortTitle}</span>
+                <span>{step.shortTitle}</span>
               </button>
             );
           })}
           <button
             onClick={() => setCurrentStepIndex(steps.length)}
-            className={`flex items-center gap-1 py-1 px-2 rounded-md transition-colors whitespace-nowrap ${
+            className={`flex items-center gap-1 py-1.5 px-3 rounded-lg transition-colors whitespace-nowrap ${
               isReviewStep
-                ? 'bg-navy text-white font-semibold'
-                : 'text-gray-400 hover:text-gray-700'
+                ? 'bg-navy text-white font-semibold shadow-sm'
+                : 'text-gray-400 hover:text-gray-700 bg-gray-50'
             }`}
           >
             <span className="w-3.5 h-3.5 rounded-full border border-current text-[9px] flex items-center justify-center">
@@ -312,9 +319,13 @@ export function CalculatorWizard({
         </div>
       </div>
 
-      {/* Focused Step Card (No Live Summary distraction during selection) */}
-      {!isReviewStep && currentStep && (
-        <div className="luxury-card p-5 sm:p-7 rounded-2xl shadow-card">
+      {/* 2-Column Responsive Layout: Wizard Steps (Left) + Live Structure & Cost Sidebar (Right) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Left Column: Interactive Wizard Steps & Review */}
+        <div className="lg:col-span-7 xl:col-span-8">
+          {/* Focused Step Card */}
+          {!isReviewStep && currentStep && (
+            <div className="luxury-card p-5 sm:p-7 rounded-2xl shadow-card">
           <div className="mb-4">
             <span className="text-[11px] uppercase font-bold tracking-wider text-bronze">
               {currentService.name} İÇİN ÖZELLEŞTİRME
@@ -407,23 +418,89 @@ export function CalculatorWizard({
                     </div>
                   )}
 
-                  {/* Field Type: select */}
-                  {field.fieldType === 'select' && field.options && (
-                    <select
-                      value={selections[field.fieldKey] || ''}
-                      onChange={(e) => updateSelection(field.fieldKey, e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 bg-white text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
-                    >
-                      {field.options.map((opt) => (
-                        <option key={opt.id} value={opt.optionKey}>
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-
-                  {/* Field Type: number */}
-                  {field.fieldType === 'number' && (
+                  {/* Specialized Render: Floor Count (Kat Sayısı) as Visual Cards */}
+                  {field.fieldKey === 'floor_count' ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1.5">
+                      {[
+                        {
+                          val: 1,
+                          label: 'Tek Katlı',
+                          desc: 'Müstakil ve Ferah Yaşam',
+                          img: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=400&q=80',
+                        },
+                        {
+                          val: 2,
+                          label: 'Çift Katlı',
+                          desc: 'Dubleks & Villa Düzeni',
+                          img: '/celik-villa-aksam.jpg',
+                        },
+                      ].map((fc) => {
+                        const isSelected = Number(selections.floor_count) === fc.val;
+                        return (
+                          <div
+                            key={fc.val}
+                            onClick={() => updateSelection('floor_count', fc.val)}
+                            className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all flex items-center gap-3 ${
+                              isSelected
+                                ? 'border-[#FF6B00] bg-orange-50/30 shadow-sm'
+                                : 'border-gray-200 hover:border-gray-300 bg-white'
+                            }`}
+                          >
+                            <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 shrink-0 border border-gray-200">
+                              <img src={fc.img} alt={fc.label} className="w-full h-full object-cover" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="font-bold text-sm text-navy-dark">{fc.label}</div>
+                              <div className="text-[11px] text-gray-500 truncate">{fc.desc}</div>
+                            </div>
+                            <div
+                              className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
+                                isSelected ? 'border-[#FF6B00] bg-[#FF6B00] text-white' : 'border-gray-300'
+                              }`}
+                            >
+                              {isSelected && <Check className="w-3 h-3" />}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : field.fieldKey === 'room_count' ? (
+                    /* Specialized Render: Room Count (Oda Sayısı) as Quick-Select Cards */
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-1.5">
+                      {['1+1', '2+1', '3+1', '4+1'].map((rc) => {
+                        const isSelected = selections.room_count === rc;
+                        return (
+                          <button
+                            key={rc}
+                            type="button"
+                            onClick={() => updateSelection('room_count', rc)}
+                            className={`py-3 px-3 rounded-xl border-2 font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                              isSelected
+                                ? 'border-[#FF6B00] bg-orange-50/40 text-navy-dark shadow-sm'
+                                : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
+                            }`}
+                          >
+                            <Home className={`w-4 h-4 ${isSelected ? 'text-[#FF6B00]' : 'text-gray-400'}`} />
+                            <span>{rc}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : field.fieldType === 'select' && field.options ? (
+                    <div className="relative">
+                      <select
+                        value={selections[field.fieldKey] || ''}
+                        onChange={(e) => updateSelection(field.fieldKey, e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 bg-white text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-bronze focus:border-bronze"
+                      >
+                        {field.options.map((opt) => (
+                          <option key={opt.id} value={opt.optionKey}>
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  ) : field.fieldType === 'number' ? (
                     <div className="relative max-w-xs">
                       <input
                         type="number"
@@ -437,13 +514,14 @@ export function CalculatorWizard({
                             e.target.value === '' ? '' : parseFloat(e.target.value)
                           )
                         }
-                        className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 bg-white text-sm text-gray-900 font-semibold focus:outline-none focus:ring-2 focus:ring-bronze"
+                        placeholder={field.fieldKey === 'building_m2' ? 'Örn: 100' : '0'}
+                        className="w-full px-3.5 py-2.5 pr-12 rounded-lg border border-gray-300 bg-white text-base text-gray-900 font-semibold focus:outline-none focus:ring-2 focus:ring-bronze"
                       />
+                      <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-gray-400 pointer-events-none">
+                        {field.fieldKey === 'building_m2' || field.fieldKey.includes('m2') ? 'm²' : field.fieldKey.includes('mtul') ? 'mtül' : 'adet'}
+                      </span>
                     </div>
-                  )}
-
-                  {/* Field Type: stepper */}
-                  {field.fieldType === 'stepper' && (
+                  ) : field.fieldType === 'stepper' ? (
                     <div className="flex items-center gap-3">
                       <button
                         type="button"
@@ -471,7 +549,7 @@ export function CalculatorWizard({
                         +
                       </button>
                     </div>
-                  )}
+                  ) : null}
 
                   {/* Field Type: text */}
                   {field.fieldType === 'text' && (
@@ -760,20 +838,195 @@ export function CalculatorWizard({
               </div>
             </div>
 
-            {/* Back Button */}
-            <div className="mt-8 pt-6 border-t border-gray-200 flex items-center justify-between">
-              <button
-                type="button"
-                onClick={() => setCurrentStepIndex(steps.length - 1)}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>Önceki Adıma Dön</span>
-              </button>
+              {/* Back Button */}
+              <div className="mt-8 pt-6 border-t border-gray-200 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => setCurrentStepIndex(steps.length - 1)}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>Önceki Adıma Dön</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Right Column: Seçilen Yapı Önizlemesi & Tahmini Maliyet Özeti (Kolayhesap Reference) */}
+      <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-24 space-y-4">
+        {/* Card 1: Seçilen Yapı Önizlemesi */}
+        <div className="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden">
+          <div className="bg-white px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-lg bg-orange-100 text-[#FF6B00] flex items-center justify-center">
+                <Home className="w-3.5 h-3.5" />
+              </div>
+              <h3 className="font-bold text-sm text-gray-900">Seçilen Yapı Önizlemesi</h3>
+            </div>
+            <span className="text-[10px] font-semibold text-gray-400 bg-gray-50 px-2 py-0.5 rounded">
+              Canlı Görünüm
+            </span>
+          </div>
+
+          <div className="relative aspect-[16/10] bg-gray-900 overflow-hidden group">
+            <img
+              src={currentService.featuredImage || '/celik-villa-aksam.jpg'}
+              alt={currentService.name}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white text-xs">
+              <span className="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-[11px] font-medium border border-white/10">
+                {currentService.name}
+              </span>
+              <span className="bg-[#FF6B00] text-white px-2 py-1 rounded text-[11px] font-bold shadow">
+                {selections.building_m2 || 0} m²
+              </span>
+            </div>
+          </div>
+
+          <div className="bg-[#0F172A] text-white p-4">
+            <h4 className="font-bold text-base text-white">
+              {selections.building_m2 || 0} m² {currentService.name}
+            </h4>
+            <p className="text-xs text-gray-400 mt-0.5">
+              Girdiğiniz metrekareye ve proje tercihlerine göre örnek görünüm.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-1.5">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-white/10 text-amber-400 text-xs font-semibold">
+                <Maximize2 className="w-3 h-3" />
+                {selections.building_m2 || 0} m²
+              </span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-white/10 text-gray-200 text-xs font-medium">
+                <Building2 className="w-3 h-3 text-bronze" />
+                {Number(selections.floor_count) === 2 ? 'Çift Katlı' : 'Tek Katlı'}
+              </span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-white/10 text-gray-200 text-xs font-medium">
+                <Home className="w-3 h-3 text-bronze" />
+                {selections.room_count || '3+1'}
+              </span>
+              {selections.city && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-white/10 text-gray-200 text-xs font-medium">
+                  <MapPin className="w-3 h-3 text-bronze" />
+                  {selections.city}
+                </span>
+              )}
             </div>
           </div>
         </div>
-      )}
+
+        {/* Card 2: Tahmini Maliyet Özeti */}
+        <div className="bg-[#0F172A] text-white rounded-2xl shadow-card border border-gray-800 overflow-hidden">
+          <div className="px-5 py-3.5 border-b border-gray-800 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-lg bg-white/10 text-amber-400 flex items-center justify-center">
+                <Tag className="w-3.5 h-3.5" />
+              </div>
+              <h3 className="font-bold text-sm text-white">Tahmini Maliyet Özeti</h3>
+            </div>
+            {isCalculating ? (
+              <span className="text-[10px] text-amber-400 font-mono animate-pulse">Hesaplanıyor...</span>
+            ) : (
+              <span className="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Canlı Senkronize
+              </span>
+            )}
+          </div>
+
+          <div className="p-4 sm:p-5 space-y-2.5 text-xs">
+            <div className="flex items-center justify-between text-gray-300">
+              <span className="flex items-center gap-2 text-gray-400">
+                <Home className="w-3.5 h-3.5 text-amber-400/80" />
+                Yapı Tipi
+              </span>
+              <span className="font-semibold text-white">{currentService.name}</span>
+            </div>
+
+            <div className="flex items-center justify-between text-gray-300">
+              <span className="flex items-center gap-2 text-gray-400">
+                <Maximize2 className="w-3.5 h-3.5 text-amber-400/80" />
+                Metrekare
+              </span>
+              <span className="font-semibold text-white">{selections.building_m2 || 0} m²</span>
+            </div>
+
+            <div className="flex items-center justify-between text-gray-300">
+              <span className="flex items-center gap-2 text-gray-400">
+                <Building2 className="w-3.5 h-3.5 text-amber-400/80" />
+                Kat Sayısı
+              </span>
+              <span className="font-semibold text-white">
+                {Number(selections.floor_count) === 2 ? 'Çift Katlı' : 'Tek Katlı'}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between text-gray-300">
+              <span className="flex items-center gap-2 text-gray-400">
+                <Layers className="w-3.5 h-3.5 text-amber-400/80" />
+                Paket
+              </span>
+              <span className="font-semibold text-white">
+                {selections.package_slug === 'kaba-yapi' ? 'Kaba Yapı' : 'Anahtar Teslim'}
+              </span>
+            </div>
+
+            {/* Dynamic Selected Extras (Only added when user chooses them) */}
+            {calculationResult?.items
+              ?.filter((it) => it.itemCode !== 'base-structure' && it.itemCode !== 'package-discount' && it.totalPrice > 0)
+              .map((it, idx) => (
+                <div key={idx} className="flex items-center justify-between pt-2 border-t border-gray-800/80 text-gray-300">
+                  <span className="text-gray-400 truncate max-w-[170px]" title={it.itemTitle}>
+                    {it.itemTitle}
+                  </span>
+                  <span className="font-semibold text-emerald-400 shrink-0">
+                    +{formatCurrency(it.totalPrice)}
+                  </span>
+                </div>
+              ))}
+          </div>
+
+          {/* Bottom Dark Total Bar */}
+          <div className="bg-black/70 px-5 py-4 border-t border-gray-800 flex items-center justify-between">
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 block">
+                GENEL TOPLAM
+              </span>
+              <span className="text-[10px] text-gray-500">KDV (%20) ve Montaj Dahil</span>
+            </div>
+            <div className="text-right">
+              <span className="text-2xl sm:text-3xl font-bold font-serif text-[#FF6B00]">
+                {formatCurrency(calculationResult?.grandTotal || 0)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  );
+
+    {/* Mobile Sticky Bar for quick look on small screens */}
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0F172A]/95 backdrop-blur-md border-t border-gray-800 p-3 px-4 flex items-center justify-between text-white shadow-2xl">
+      <div>
+        <span className="text-[10px] uppercase text-gray-400 block font-semibold">Tahmini Tutar</span>
+        <span className="text-lg font-bold text-[#FF6B00] font-serif">
+          {formatCurrency(calculationResult?.grandTotal || 0)}
+        </span>
+      </div>
+      <button
+        type="button"
+        onClick={() => {
+          if (!isReviewStep) {
+            setCurrentStepIndex(steps.length);
+          }
+        }}
+        className="px-4 py-2 rounded-lg bg-[#FF6B00] hover:bg-orange-600 text-white font-semibold text-xs flex items-center gap-1.5 shadow"
+      >
+        <span>{isReviewStep ? 'Teklifi Al' : 'Teklif Dökümü'}</span>
+        <ArrowRight className="w-3.5 h-3.5" />
+      </button>
+    </div>
+  </div>
+);
 }
