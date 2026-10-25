@@ -94,7 +94,52 @@ export default async function AdminDashboardPage() {
           </Link>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Mobile Cards for Recent Leads */}
+        <div className="md:hidden divide-y divide-slate-800">
+          {leads.slice(0, 5).map((lead) => (
+            <div key={lead.id} className="p-4 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="font-mono font-bold text-xs text-[#FF6B00]">
+                  {lead.quoteCode}
+                </span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-200">
+                  {lead.status === 'new' && 'Yeni'}
+                  {lead.status === 'contacted' && 'Görüşüldü'}
+                  {lead.status === 'proposal_sent' && 'Teklif Verildi'}
+                  {lead.status === 'won' && 'Kazanıldı'}
+                  {lead.status === 'lost' && 'Kaybedildi'}
+                </span>
+              </div>
+
+              <div>
+                <span className="font-semibold text-white text-sm block">{lead.fullName}</span>
+                <span className="text-xs text-slate-400 block mt-0.5">
+                  {lead.city} • {lead.phone}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between pt-1">
+                <span className="text-[11px] text-slate-500">{formatDate(lead.createdAt)}</span>
+                <Link
+                  href="/admin/teklifler"
+                  className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs flex items-center gap-1"
+                >
+                  <span>Detay</span>
+                  <ArrowRight className="w-3 h-3 text-[#FF6B00]" />
+                </Link>
+              </div>
+            </div>
+          ))}
+
+          {leads.length === 0 && (
+            <div className="p-6 text-center text-slate-500 text-xs">
+              Henüz teklif talebi bulunmuyor.
+            </div>
+          )}
+        </div>
+
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-900/60 text-slate-400 border-b border-slate-800">
               <tr>

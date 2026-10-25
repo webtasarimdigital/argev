@@ -16,6 +16,7 @@ import {
   Calendar,
   AlertCircle,
   FileSpreadsheet,
+  MessageSquare,
 } from 'lucide-react';
 
 export default function AdminTekliflerPage() {
@@ -158,8 +159,76 @@ export default function AdminTekliflerPage() {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden">
+      {/* Mobile Cards List (Optimized for small screens) */}
+      <div className="md:hidden space-y-3">
+        {filteredLeads.map((lead) => (
+          <div
+            key={lead.id}
+            className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3 shadow-sm"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-mono font-bold text-xs text-[#FF6B00]">
+                {lead.quoteCode}
+              </span>
+              <span
+                className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold ${
+                  lead.channel === 'whatsapp_intent'
+                    ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
+                    : 'bg-blue-950 text-blue-400 border border-blue-800'
+                }`}
+              >
+                {lead.channel === 'whatsapp_intent' ? 'WhatsApp' : 'Web Formu'}
+              </span>
+            </div>
+
+            <div>
+              <h3 className="font-bold text-white text-sm">{lead.fullName}</h3>
+              <p className="text-xs text-slate-400 mt-0.5">
+                {lead.city} {lead.district ? `/ ${lead.district}` : ''} • {formatDate(lead.createdAt)}
+              </p>
+            </div>
+
+            <div className="flex items-center justify-between pt-2 border-t border-slate-800/80">
+              <div className="flex items-center gap-2">
+                <a
+                  href={`tel:${lead.phone.replace(/\s+/g, '')}`}
+                  className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs flex items-center gap-1.5 shadow"
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>Ara</span>
+                </a>
+                <a
+                  href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=Merhaba%20${encodeURIComponent(lead.fullName)},%20ARGEV%20Yapı'dan%20${lead.quoteCode}%20nolu%20çelik%20yapı%20teklifiniz%20için%20ulaşıyorum.`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 rounded-lg bg-emerald-950 border border-emerald-800 text-emerald-300 font-semibold text-xs flex items-center gap-1"
+                >
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  <span>WhatsApp</span>
+                </a>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setSelectedLead(lead)}
+                className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs inline-flex items-center gap-1"
+              >
+                <Eye className="w-3.5 h-3.5 text-[#FF6B00]" />
+                <span>İncele</span>
+              </button>
+            </div>
+          </div>
+        ))}
+
+        {filteredLeads.length === 0 && (
+          <div className="p-8 text-center text-slate-500 bg-slate-950 border border-slate-800 rounded-2xl">
+            Henüz bu filtreye uygun teklif bulunmuyor.
+          </div>
+        )}
+      </div>
+
+      {/* Desktop Table (Visible on medium and larger screens) */}
+      <div className="hidden md:block bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-900/60 text-slate-400 border-b border-slate-800">

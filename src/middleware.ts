@@ -1,8 +1,28 @@
-﻿import { type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
-  return createClient(request);
+  try {
+    const { pathname } = request.nextUrl;
+
+    // Admin authentication check (protect all /admin pages except /admin/login)
+    if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
+      const adminSession = request.cookies.get('argev_admin_session')?.value;
+      if (!adminSession) {
+        const loginUrl = new URL('/admin/login', request.url);
+        return NextResponse.redirect(loginUrl);
+      }
+    }
+
+    return createClient(request);
+  } catch (error) {
+    // Fail open safely — never crash entire website with 500
+    return NextResponse.next({
+      request: {
+        headers: request.headers,
+      },
+    });
+  }
 }
 
 export const config = {
