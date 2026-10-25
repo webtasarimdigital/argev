@@ -20,7 +20,7 @@ export function StickyMobileBar() {
     >
       <div className="max-w-md mx-auto grid grid-cols-3 gap-2">
         <a
-          href="tel:+903805240000"
+          href="tel:05413980081"
           className="flex flex-col items-center justify-center py-1.5 px-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-colors"
         >
           <Phone className="w-4 h-4 text-bronze-light mb-0.5" />
@@ -28,7 +28,7 @@ export function StickyMobileBar() {
         </a>
 
         <a
-          href="https://wa.me/905321234567?text=Merhaba%20ARGEV%20Yapı,%20çelik%20ev%20projeleriniz%20hakkında%20bilgi%20almak%20istiyorum."
+          href="https://wa.me/905413980081?text=Merhaba%20ARGEV%20Yapı,%20çelik%20ev%20projeleriniz%20hakkında%20bilgi%20almak%20istiyorum."
           target="_blank"
           rel="noopener noreferrer"
           className="flex flex-col items-center justify-center py-1.5 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 transition-colors"

@@ -10,6 +10,7 @@ import {
   Pause,
   Volume2,
   VolumeX,
+  Phone,
 } from 'lucide-react';
 
 export function HeroSection() {
@@ -94,14 +95,15 @@ export function HeroSection() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
-        {/* Engineering Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-medium text-warm-white mb-6 backdrop-blur-md shadow-md animate-fade-in">
+        {/* Engineering Badge with Live Indicator */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-950/70 border border-white/20 text-xs font-medium text-warm-white mb-6 backdrop-blur-md shadow-lg animate-float">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
           <ShieldCheck className="w-4 h-4 text-bronze-light" />
-          <span>Düzce ve Batı Karadeniz&apos;in Güvenli Çelik Mimarisi</span>
+          <span>Düzce Fabrika İmalatı • 1. Derece Deprem Çelik Mimarisi</span>
         </div>
 
         {/* Main Headline */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-white tracking-tight max-w-4xl leading-[1.15] mb-6 drop-shadow-md">
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-white tracking-tight max-w-4xl leading-[1.15] mb-6 drop-shadow-lg">
           Depreme Dayanıklı, <br className="hidden sm:inline" />
           <span className="bronze-text-gradient">Lüks Çelik Konut</span> ve Villalar
         </h1>
@@ -115,7 +117,7 @@ export function HeroSection() {
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
           <Link
             href="/fiyat-hesaplama"
-            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-bronze to-bronze-dark hover:from-bronze-light hover:to-bronze shadow-lg shadow-bronze/30 hover:scale-[1.02] transition-all"
+            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-bronze via-bronze-light to-bronze shadow-lg shadow-bronze/30 hover:shadow-bronze-glow hover:scale-[1.03] transition-all duration-300 shimmer-btn"
           >
             <Calculator className="w-5 h-5" />
             <span>Fiyatınızı Hesaplayın</span>
@@ -124,15 +126,24 @@ export function HeroSection() {
 
           <Link
             href="/projeler"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold text-white bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md hover:border-white/30 transition-all shadow-md"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md hover:border-white/40 transition-all duration-300 shadow-md hover:scale-[1.02]"
           >
             <span>Projelerimizi İnceleyin</span>
           </Link>
+
+          <a
+            href="tel:05413980081"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-sm font-semibold text-gray-200 hover:text-white bg-slate-900/60 hover:bg-slate-900/80 border border-white/15 backdrop-blur-md transition-all hover:border-bronze"
+            title="Düzce Merkez Ofis"
+          >
+            <Phone className="w-4 h-4 text-bronze-light" />
+            <span>0541 398 00 81</span>
+          </a>
         </div>
 
-        {/* Key Architectural Metrics Bar */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full max-w-5xl">
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-white/10 backdrop-blur-md text-left shadow-lg">
+        {/* Key Architectural Metrics Bar with Hover Transitions */}
+        <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full max-w-5xl">
+          <div className="p-4 rounded-xl bg-slate-950/70 border border-white/10 hover:border-bronze/50 backdrop-blur-md text-left shadow-lg hover:-translate-y-1 transition-all duration-300">
             <span className="text-2xl sm:text-3xl font-bold font-serif text-white block">
               %100
             </span>
@@ -141,7 +152,7 @@ export function HeroSection() {
             </span>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-white/10 backdrop-blur-md text-left shadow-lg">
+          <div className="p-4 rounded-xl bg-slate-950/70 border border-white/10 hover:border-bronze/50 backdrop-blur-md text-left shadow-lg hover:-translate-y-1 transition-all duration-300">
             <span className="text-2xl sm:text-3xl font-bold font-serif text-bronze-light block">
               35-45 Gün
             </span>
@@ -150,7 +161,7 @@ export function HeroSection() {
             </span>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-white/10 backdrop-blur-md text-left shadow-lg">
+          <div className="p-4 rounded-xl bg-slate-950/70 border border-white/10 hover:border-bronze/50 backdrop-blur-md text-left shadow-lg hover:-translate-y-1 transition-all duration-300">
             <span className="text-2xl sm:text-3xl font-bold font-serif text-white block">
               100+ Yıl
             </span>
@@ -159,7 +170,7 @@ export function HeroSection() {
             </span>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-white/10 backdrop-blur-md text-left shadow-lg">
+          <div className="p-4 rounded-xl bg-slate-950/70 border border-white/10 hover:border-bronze/50 backdrop-blur-md text-left shadow-lg hover:-translate-y-1 transition-all duration-300">
             <span className="text-2xl sm:text-3xl font-bold font-serif text-bronze-light block">
               Sabit Fiyat
             </span>

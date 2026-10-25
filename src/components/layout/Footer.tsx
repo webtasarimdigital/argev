@@ -5,6 +5,7 @@ import {
   Phone,
   Mail,
   Instagram,
+  MessageSquare,
   ExternalLink,
   ShieldCheck,
   Clock,
@@ -151,17 +152,38 @@ export function Footer() {
           <div>
             <h3 className="text-sm font-semibold tracking-wider uppercase text-white font-serif mb-4 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-bronze" />
-              Merkez Ofis
+              Merkez Ofis & İletişim
             </h3>
             <div className="space-y-3.5 text-xs sm:text-sm text-gray-400">
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-bronze shrink-0 mt-0.5" />
-                <span>Kültür Mah. Mehmet Akif Cad. No: 42/B, Merkez / DÜZCE</span>
+                <div>
+                  <span>Kültür Mah. Mehmet Akif Cad. No: 42/B, Merkez / DÜZCE</span>
+                  <a
+                    href="https://share.google/hRm0NKr0D9ILdZyGQ"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-xs text-bronze-light hover:text-white underline mt-1 font-medium"
+                  >
+                    Google Haritalarda Görüntüle →
+                  </a>
+                </div>
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-bronze shrink-0" />
-                <a href="tel:+903805240000" className="hover:text-white">
-                  0 (380) 524 00 00
+                <a href="tel:05413980081" className="hover:text-white font-semibold text-warm-white">
+                  0541 398 00 81
+                </a>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <MessageSquare className="w-4 h-4 text-emerald-500 shrink-0" />
+                <a
+                  href="https://wa.me/905413980081?text=Merhaba%20ARGEV%20Yapı,%20çelik%20ev%20ve%20yapı%20projeleriniz%20hakkında%20bilgi%20almak%20istiyorum."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-emerald-400 font-medium text-emerald-400"
+                >
+                  WhatsApp: 0541 398 00 81
                 </a>
               </div>
               <div className="flex items-center gap-2.5">

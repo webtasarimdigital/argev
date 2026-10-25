@@ -14,6 +14,8 @@ import {
   Layers,
   Sparkles,
   Award,
+  Phone,
+  MessageSquare,
 } from 'lucide-react';
 
 interface PageProps {
@@ -178,6 +180,40 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 </Link>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Custom Work & Extra Demands Consultation Card */}
+        <div className="luxury-card p-8 rounded-3xl bg-gradient-to-r from-navy-dark via-navy to-navy-dark text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-luxury-lg border border-white/10">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-widest text-bronze-light block mb-1">
+              ÖZEL İMALAT VE EKSTRA TALEPLER
+            </span>
+            <h3 className="text-xl sm:text-2xl font-serif font-bold text-white mb-2">
+              Standart Dışı Projeniz veya Ekstra İşleriniz mi Var?
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-300 max-w-xl font-light">
+              Özel veranda, ferforje bahçe kapısı, çelik sundurma veya arsanıza özel statik keşif için doğrudan mühendislerimizle görüşün.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0">
+            <a
+              href="tel:05413980081"
+              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs flex items-center justify-center gap-2 border border-white/20 backdrop-blur-md transition-all"
+            >
+              <Phone className="w-4 h-4 text-bronze-light" />
+              <span>0541 398 00 81</span>
+            </a>
+            <a
+              href="https://wa.me/905413980081?text=Merhaba%20ARGEV%20Yapı,%20özel%20çelik%20projem%20hakkında%20bilgi%20almak%20istiyorum."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-md transition-all"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>WhatsApp ile Danışın</span>
+            </a>
           </div>
         </div>
       </div>

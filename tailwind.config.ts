@@ -44,6 +44,31 @@ const config: Config = {
         luxury: "0 20px 40px -15px rgba(13, 26, 40, 0.12)",
         "luxury-lg": "0 25px 50px -12px rgba(13, 26, 40, 0.25)",
         card: "0 4px 20px -2px rgba(21, 40, 58, 0.06)",
+        "bronze-glow": "0 0 25px -5px rgba(134, 107, 85, 0.4)",
+      },
+      keyframes: {
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-6px)" },
+        },
+        pulseSlow: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.6" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+        fadeInUp: {
+          "0%": { opacity: "0", transform: "translateY(16px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        float: "float 4s ease-in-out infinite",
+        "pulse-slow": "pulseSlow 3s ease-in-out infinite",
+        shimmer: "shimmer 3s infinite linear",
+        "fade-in-up": "fadeInUp 0.6s ease-out forwards",
       },
     },
   },

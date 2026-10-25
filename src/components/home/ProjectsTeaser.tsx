@@ -33,14 +33,18 @@ export function ProjectsTeaser({ projects }: ProjectsTeaserProps) {
           {projects.slice(0, 3).map((prj) => (
             <div
               key={prj.id}
-              className="luxury-card rounded-2xl overflow-hidden flex flex-col justify-between group"
+              className="luxury-card rounded-2xl overflow-hidden flex flex-col justify-between group hover:-translate-y-1.5 transition-all duration-300 relative border border-warm-border hover:border-bronze shadow-card hover:shadow-luxury-lg bg-white"
             >
+              {/* Top expanding bronze accent line on hover */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-bronze to-bronze-light w-0 group-hover:w-full transition-all duration-500 z-20" />
+
               <div>
                 <div className="relative h-64 w-full overflow-hidden bg-navy-dark">
                   <img
                     src={prj.coverImage}
                     alt={prj.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                    loading="lazy"
                   />
                   <div className="absolute top-4 left-4 bg-navy-dark/85 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-warm-white flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5 text-bronze" />

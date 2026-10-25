@@ -54,14 +54,17 @@ export function ProcessSection() {
             return (
               <div
                 key={idx}
-                className="luxury-card p-8 rounded-2xl relative flex flex-col justify-between"
+                className="luxury-card p-8 rounded-2xl relative flex flex-col justify-between group hover:-translate-y-2 transition-all duration-300 hover:border-bronze hover:shadow-luxury-lg overflow-hidden bg-white"
               >
+                {/* Top expanding accent line on hover */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-bronze to-bronze-light w-0 group-hover:w-full transition-all duration-500" />
+
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <span className="text-4xl font-serif font-bold text-navy/15">
+                    <span className="text-4xl font-serif font-bold text-navy/15 group-hover:text-bronze/30 transition-colors">
                       {st.num}
                     </span>
-                    <div className="w-12 h-12 rounded-xl bg-navy/5 text-navy flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-xl bg-navy/5 text-navy flex items-center justify-center group-hover:bg-bronze/15 group-hover:scale-110 transition-all duration-300">
                       <Icon className="w-6 h-6 text-bronze" />
                     </div>
                   </div>

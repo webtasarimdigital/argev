@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
     // Prepare WhatsApp URL if channel is whatsapp_intent
     let whatsappUrl: string | undefined = undefined;
     if (data.channel === 'whatsapp_intent') {
-      const cleanPhone = (settings.whatsappNumber || '+905321234567').replace(/[^0-9]/g, '');
+      const cleanPhone = (settings.whatsappNumber || '05413980081').replace(/[^0-9]/g, '');
       const message = `Merhaba ARGEV Yapı,\n\n📋 *Teklif Kodu:* ${quote.quoteCode}\n🏗️ *Hizmet:* ${quote.serviceName} (${quote.packageTitle})\n📐 *Yapı Alanı:* ${quote.buildingM2} m²\n📍 *Lokasyon:* ${data.city} / ${data.district || 'Merkez'}\n👤 *İsim:* ${data.fullName}\n📞 *Telefon:* ${data.phone}\n💰 *Tahmini Tutar:* ${quote.hasQuoteOnlyItems ? 'Keşif Gerektirir / Kısmi Hesap' : formatCurrency(quote.grandTotal)}\n${data.notes ? `📝 *Not:* ${data.notes}\n` : ''}\nWeb siteniz üzerinden hazırladığım çelik yapı teklifim hakkında görüşmek ve keşif planlamak istiyorum.`;
 
       whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;

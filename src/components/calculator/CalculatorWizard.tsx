@@ -234,11 +234,11 @@ export function CalculatorWizard({
               <span>Yeni Bir Hesaplama Yap</span>
             </button>
             <a
-              href="tel:+903805240000"
+              href="tel:05413980081"
               className="w-full sm:w-auto px-6 py-3 rounded-lg bg-navy text-white font-semibold text-sm hover:bg-navy-light flex items-center justify-center gap-2"
             >
               <Phone className="w-4 h-4" />
-              <span>Düzce Ofisi Ara: 0 (380) 524 00 00</span>
+              <span>Düzce Ofisi Ara: 0541 398 00 81</span>
             </a>
           </div>
         </div>

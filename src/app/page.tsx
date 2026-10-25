@@ -61,11 +61,11 @@ export default async function HomePage() {
               <ArrowRight className="w-4 h-4" />
             </Link>
             <a
-              href="tel:+903805240000"
+              href="tel:05413980081"
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-medium text-sm border border-white/15 flex items-center justify-center gap-2"
             >
               <PhoneCall className="w-4 h-4 text-bronze-light" />
-              <span>0 (380) 524 00 00</span>
+              <span>0541 398 00 81</span>
             </a>
           </div>
         </div>

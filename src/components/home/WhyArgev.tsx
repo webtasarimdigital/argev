@@ -64,12 +64,12 @@ export function WhyArgev() {
             return (
               <div
                 key={idx}
-                className="p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-bronze/50 transition-all duration-300 group"
+                className="p-8 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-bronze transition-all duration-300 group hover:-translate-y-1.5 hover:shadow-bronze-glow relative overflow-hidden"
               >
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-bronze to-bronze-dark text-white flex items-center justify-center mb-6 shadow-md shadow-bronze/20 group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-bronze to-bronze-dark text-white flex items-center justify-center mb-6 shadow-md shadow-bronze/30 group-hover:scale-110 group-hover:shadow-bronze-glow transition-all duration-300">
                   <Icon className="w-6 h-6 text-warm-white" />
                 </div>
-                <h3 className="text-lg font-bold font-serif text-white mb-2.5">
+                <h3 className="text-lg font-bold font-serif text-white mb-2.5 group-hover:text-bronze-light transition-colors">
                   {pt.title}
                 </h3>
                 <p className="text-xs text-gray-400 leading-relaxed font-light">

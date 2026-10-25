@@ -11,6 +11,8 @@ import {
   ChevronRight,
   Shield,
   Layers,
+  Instagram,
+  MapPin,
 } from 'lucide-react';
 
 export function Navbar() {
@@ -90,16 +92,26 @@ export function Navbar() {
             </nav>
 
             {/* Header Right Actions */}
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-3 xl:gap-4">
               <a
-                href="tel:+903805240000"
+                href="https://www.instagram.com/argevyapiduzce/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-300 hover:text-white transition-colors"
+                title="Instagram @argevyapiduzce"
+              >
+                <Instagram className="w-3.5 h-3.5" />
+              </a>
+
+              <a
+                href="tel:05413980081"
                 className="flex items-center gap-2 text-xs xl:text-sm font-medium text-gray-300 hover:text-white transition-colors"
                 title="Düzce Ofis Telefonu"
               >
                 <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-bronze-light">
                   <Phone className="w-3.5 h-3.5" />
                 </div>
-                <span>0 (380) 524 00 00</span>
+                <span>0541 398 00 81</span>
               </a>
 
               <Link
@@ -180,11 +192,20 @@ export function Navbar() {
 
             <div className="pt-6 border-t border-white/10 flex flex-col gap-3">
               <a
-                href="tel:+903805240000"
+                href="tel:05413980081"
                 className="flex items-center justify-center gap-2 py-3 px-4 rounded-lg bg-white/5 text-gray-200 text-sm font-medium hover:bg-white/10"
               >
                 <Phone className="w-4 h-4 text-bronze" />
-                <span>0 (380) 524 00 00</span>
+                <span>0541 398 00 81</span>
+              </a>
+              <a
+                href="https://www.instagram.com/argevyapiduzce/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-white/5 text-gray-200 text-xs font-medium hover:bg-white/10"
+              >
+                <Instagram className="w-4 h-4 text-pink-400" />
+                <span>Instagram: @argevyapiduzce</span>
               </a>
               <Link
                 href="/fiyat-hesaplama"

@@ -104,9 +104,9 @@ export default function IletisimPage() {
                   <Phone className="w-5 h-5 text-bronze" />
                 </div>
                 <div>
-                  <span className="text-xs font-semibold text-gray-500 block uppercase">Telefon</span>
-                  <a href="tel:+903805240000" className="text-sm text-gray-800 font-bold hover:text-navy mt-0.5 block">
-                    0 (380) 524 00 00
+                  <span className="text-xs font-semibold text-gray-500 block uppercase">Telefon & Danışma</span>
+                  <a href="tel:05413980081" className="text-sm text-gray-800 font-bold hover:text-navy mt-0.5 block">
+                    0541 398 00 81
                   </a>
                 </div>
               </div>
@@ -116,14 +116,14 @@ export default function IletisimPage() {
                   <MessageSquare className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-xs font-semibold text-gray-500 block uppercase">WhatsApp Hızlı İletişim</span>
+                  <span className="text-xs font-semibold text-gray-500 block uppercase">WhatsApp Hızlı Teklif Hattı</span>
                   <a
-                    href="https://wa.me/905321234567"
+                    href="https://wa.me/905413980081?text=Merhaba%20ARGEV%20Yapı,%20çelik%20ev%20ve%20yapı%20projeleriniz%20hakkında%20bilgi%20almak%20istiyorum."
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm text-emerald-700 font-bold hover:underline mt-0.5 block"
                   >
-                    +90 532 123 45 67
+                    0541 398 00 81
                   </a>
                 </div>
               </div>
