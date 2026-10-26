@@ -18,14 +18,31 @@ export default function AdminLoginPage() {
 
     const cleanUsername = username.trim().toLowerCase();
     const validUsernames = ['argev', 'admin', 'admin@argevyapi.com'];
-    const validPasswords = ['argevçelikev1.', 'argevcelikev1.', 'argev2026!admin', 'Argevdatabase123.'];
+    
+    // Normalize password: lowercase, convert Turkish characters, trim trailing dots
+    const cleanPassword = password.trim();
+    const normalizedPassword = cleanPassword
+      .toLowerCase()
+      .replace(/ğ/g, 'g')
+      .replace(/ü/g, 'u')
+      .replace(/ş/g, 's')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ç/g, 'c')
+      .replace(/\.+$/, '');
 
     const isValidUser = validUsernames.includes(cleanUsername);
-    const isValidPass = validPasswords.includes(password.trim());
+    const isValidPass =
+      normalizedPassword === 'argecelikev1' ||
+      normalizedPassword === 'argevcelikev1' ||
+      cleanPassword === 'argeçelikev1' ||
+      cleanPassword === 'argevçelikev1' ||
+      cleanPassword === 'argev2026!admin' ||
+      cleanPassword === 'Argevdatabase123.';
 
     if (isValidUser && isValidPass) {
       // Set secure admin session cookie for 30 days
-      document.cookie = 'argev_admin_session=active; path=/; max-age=2592000; SameSite=Lax';
+      document.cookie = 'argev_admin_session=authenticated; path=/; max-age=2592000; SameSite=Lax';
       setTimeout(() => {
         router.push('/admin');
         router.refresh();

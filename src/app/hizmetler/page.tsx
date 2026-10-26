@@ -11,6 +11,9 @@ export const metadata: Metadata = {
     'Hafif çelik ev, ağır çelik ev, çelik villa, ağır çelik villa, çelik garaj ve ferforje imalatı. Depreme dayanıklı kalıcı yapılar.',
 };
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function HizmetlerPage() {
   const services = await DataStore.getServices();
 

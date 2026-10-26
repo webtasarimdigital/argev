@@ -10,6 +10,9 @@ import { ProjectsTeaser } from '@/components/home/ProjectsTeaser';
 import { FAQSection } from '@/components/home/FAQSection';
 import { Calculator, ArrowRight, ShieldCheck, PhoneCall } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function HomePage() {
   const services = await DataStore.getServices();
   const projects = await DataStore.getProjects();

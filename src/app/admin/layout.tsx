@@ -1,17 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
-  Layers,
   Calculator,
-  DollarSign,
   Users,
-  FolderOpen,
   Settings,
-  ShieldAlert,
   LogOut,
   ExternalLink,
   Menu,
@@ -26,6 +22,25 @@ export default function AdminLayout({
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+  // Client-side authentication guard
+  useEffect(() => {
+    if (pathname === '/admin/login') {
+      setIsCheckingAuth(false);
+      return;
+    }
+
+    const hasSession = document.cookie
+      .split(';')
+      .some((item) => item.trim() === 'argev_admin_session=authenticated');
+
+    if (!hasSession) {
+      router.push('/admin/login');
+    } else {
+      setIsCheckingAuth(false);
+    }
+  }, [pathname, router]);
 
   // If login page, do not render admin sidebar
   if (pathname === '/admin/login') {
@@ -33,16 +48,14 @@ export default function AdminLayout({
   }
 
   const handleLogout = () => {
-    document.cookie = 'argev_admin_session=; path=/; max-age=0; SameSite=Lax';
+    document.cookie = 'argev_admin_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; max-age=0; SameSite=Lax';
     router.push('/admin/login');
   };
 
   const menuItems = [
     { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-    { label: 'Hesaplayıcı & Fiyatlar', href: '/admin/hesaplayici', icon: Calculator },
-    { label: 'Hizmet Yönetimi', href: '/admin/hizmetler', icon: Layers },
-    { label: 'Parametrik Fiyatlar', href: '/admin/fiyatlar', icon: DollarSign },
-    { label: 'Teklifler & Başvurular', href: '/admin/teklifler', icon: Users },
+    { label: 'Hesaplayıcı & Fiyatlar', href: '/admin/fiyatlar', icon: Calculator },
+    { label: 'Teklif Talepleri', href: '/admin/teklifler', icon: Users },
     { label: 'Site Ayarları', href: '/admin/ayarlar', icon: Settings },
   ];
 
@@ -184,7 +197,15 @@ export default function AdminLayout({
         </header>
 
         {/* Page Content: mobile-optimized padding */}
-        <div className="p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">{children}</div>
+        <div className="p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
+          {isCheckingAuth ? (
+            <div className="flex items-center justify-center min-h-[300px] text-slate-400 text-xs">
+              <span>Yönetici oturumu kontrol ediliyor...</span>
+            </div>
+          ) : (
+            children
+          )}
+        </div>
       </main>
 
       {/* Mobile Bottom Navigation Bar (Sade & Şık) */}
@@ -199,6 +220,15 @@ export default function AdminLayout({
           <span>Özet</span>
         </Link>
         <Link
+          href="/admin/fiyatlar"
+          className={`flex flex-col items-center gap-0.5 py-1 px-3 rounded-lg text-[10px] font-medium transition-colors ${
+            pathname.startsWith('/admin/fiyatlar') ? 'text-[#D4560A]' : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          <Calculator className="w-4 h-4" />
+          <span>Fiyatlar</span>
+        </Link>
+        <Link
           href="/admin/teklifler"
           className={`flex flex-col items-center gap-0.5 py-1 px-3 rounded-lg text-[10px] font-medium transition-colors ${
             pathname.startsWith('/admin/teklifler') ? 'text-[#D4560A]' : 'text-slate-400 hover:text-white'
@@ -208,22 +238,13 @@ export default function AdminLayout({
           <span>Teklifler</span>
         </Link>
         <Link
-          href="/admin/fiyatlar"
+          href="/admin/ayarlar"
           className={`flex flex-col items-center gap-0.5 py-1 px-3 rounded-lg text-[10px] font-medium transition-colors ${
-            pathname.startsWith('/admin/fiyatlar') ? 'text-[#D4560A]' : 'text-slate-400 hover:text-white'
+            pathname.startsWith('/admin/ayarlar') ? 'text-[#D4560A]' : 'text-slate-400 hover:text-white'
           }`}
         >
-          <DollarSign className="w-4 h-4" />
-          <span>Fiyatlar</span>
-        </Link>
-        <Link
-          href="/admin/hizmetler"
-          className={`flex flex-col items-center gap-0.5 py-1 px-3 rounded-lg text-[10px] font-medium transition-colors ${
-            pathname.startsWith('/admin/hizmetler') ? 'text-[#D4560A]' : 'text-slate-400 hover:text-white'
-          }`}
-        >
-          <Layers className="w-4 h-4" />
-          <span>Hizmetler</span>
+          <Settings className="w-4 h-4" />
+          <span>Ayarlar</span>
         </Link>
         <button
           type="button"

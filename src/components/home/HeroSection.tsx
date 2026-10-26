@@ -113,11 +113,11 @@ export function HeroSection() {
           Milimetrik hassasiyette galvanizli çelik karkas, A+ ısı yalıtımı ve modern mimari estetik. Düzce fabrikamızda üretip arsanızda 45 günde anahtar teslim kuruyoruz.
         </p>
 
-        {/* Action CTAs: On mobile, only 1 prominent button; on desktop all 3 */}
+        {/* Action CTAs: On mobile, Projelerimizi İnceleyin; on desktop, Fiyatınızı Hesaplayın + Projelerimizi İnceleyin */}
         <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto">
           <Link
             href="/fiyat-hesaplama"
-            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-3.5 sm:py-4 rounded-xl text-sm sm:text-base font-semibold text-white bg-gradient-to-r from-bronze via-bronze-light to-bronze shadow-lg shadow-bronze/30 hover:shadow-bronze-glow hover:scale-[1.03] transition-all duration-300 shimmer-btn"
+            className="hidden sm:flex w-full sm:w-auto items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-bronze via-bronze-light to-bronze shadow-lg shadow-bronze/30 hover:shadow-bronze-glow hover:scale-[1.03] transition-all duration-300 shimmer-btn"
           >
             <Calculator className="w-5 h-5" />
             <span>Fiyatınızı Hesaplayın</span>
@@ -126,9 +126,10 @@ export function HeroSection() {
 
           <Link
             href="/projeler"
-            className="hidden sm:flex w-full sm:w-auto items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md hover:border-white/40 transition-all duration-300 shadow-md hover:scale-[1.02]"
+            className="flex w-full sm:w-auto items-center justify-center gap-2 px-8 py-3.5 sm:py-4 rounded-xl text-sm sm:text-base font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md hover:border-white/40 transition-all duration-300 shadow-md hover:scale-[1.02]"
           >
             <span>Projelerimizi İnceleyin</span>
+            <ArrowRight className="w-4 h-4 sm:hidden" />
           </Link>
 
           <a

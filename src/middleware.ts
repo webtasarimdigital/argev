@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
     // Admin authentication check (protect all /admin pages except /admin/login)
     if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
       const adminSession = request.cookies.get('argev_admin_session')?.value;
-      if (!adminSession) {
+      if (!adminSession || adminSession !== 'authenticated') {
         const loginUrl = new URL('/admin/login', request.url);
         return NextResponse.redirect(loginUrl);
       }

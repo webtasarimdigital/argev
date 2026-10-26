@@ -235,4 +235,111 @@ describe('ARGEV Yapı — Fiyatlandırma Motoru ve 12 Başarı Testi', () => {
     expect(roundCurrency(0.1 + 0.2)).toBe(0.3);
     expect(roundCurrency(12345.6789)).toBe(12345.68);
   });
+
+  // 10. Hizmete özel dinamik kural ekleme ve hesaplama (Kullanıcının talep ettiği: Çelik eve banyo ekstrası)
+  it('Kriter 10: Hizmete özel dinamik kural seçildiğinde teklif dökümüne ve toplamına hatasız yansır', () => {
+    const customBanyoRule = {
+      id: 'rule-custom-banyo',
+      serviceId: hafifCelikService.id,
+      category: 'bathroom' as const,
+      code: 'extra_banyo_lux',
+      title: 'Banyo Ekstrası',
+      pricingType: 'per_piece' as const,
+      unitLabel: '₺/adet',
+      unitPrice: 25000,
+      isOptional: true,
+      isActive: true,
+      displayOrder: 99,
+    };
+
+    // Hafif çelik ev için 1 adet Banyo Ekstrası seçildiğinde:
+    const resultHafif = calculateQuote(
+      {
+        serviceSlug: 'hafif-celik-ev',
+        packageSlug: 'anahtar-teslim',
+        buildingM2: 100,
+        city: 'Düzce',
+        district: 'Merkez',
+        selections: {
+          extra_banyo_lux: 1,
+        },
+      },
+      {
+        service: hafifCelikService,
+        rules: [...INITIAL_PRICING_RULES, customBanyoRule],
+      }
+    );
+
+    const banyoItem = resultHafif.items.find((i) => i.itemCode === 'extra_banyo_lux');
+    expect(banyoItem).toBeDefined();
+    expect(banyoItem?.itemTitle).toBe('Banyo Ekstrası');
+    expect(banyoItem?.totalPrice).toBe(25000);
+    expect(banyoItem?.category).toBe('Islak Hacimler');
+    expect(resultHafif.optionsTotal).toBe(25000);
+
+    // Aynı kural Çelik Garaj hizmetinde seçilemez / yansımaz (farklı serviceId)
+    const resultGaraj = calculateQuote(
+      {
+        serviceSlug: 'celik-garaj',
+        packageSlug: 'anahtar-teslim',
+        buildingM2: 40,
+        city: 'Düzce',
+        district: 'Merkez',
+        selections: {
+          extra_banyo_lux: 1,
+        },
+      },
+      {
+        service: garajService,
+        rules: [...INITIAL_PRICING_RULES, customBanyoRule],
+      }
+    );
+
+    const garajBanyoItem = resultGaraj.items.find((i) => i.itemCode === 'extra_banyo_lux');
+    expect(garajBanyoItem).toBeUndefined(); // Garaja dahil edilmez!
+  });
+
+  // 11. Çift Katlı / Tek Katlı Seçiminde Kat Fiyatı Etkisi
+  it('Kriter 11: Çift katlı seçildiğinde ara kat ve merdiven kuralı fiyata eklenir, tek katlıda eklenmez', () => {
+    // 1 Katlı test
+    const tekKatResult = calculateQuote(
+      {
+        serviceSlug: 'hafif-celik-ev',
+        packageSlug: 'anahtar-teslim',
+        buildingM2: 100,
+        city: 'Düzce',
+        district: 'Merkez',
+        selections: {
+          floor_count: 1,
+        },
+      },
+      {
+        service: hafifCelikService,
+        rules: INITIAL_PRICING_RULES,
+      }
+    );
+    expect(tekKatResult.items.some((i) => i.itemCode === 'FLOOR_DOUBLE_STORY')).toBe(false);
+
+    // 2 Katlı test
+    const ciftKatResult = calculateQuote(
+      {
+        serviceSlug: 'hafif-celik-ev',
+        packageSlug: 'anahtar-teslim',
+        buildingM2: 100,
+        city: 'Düzce',
+        district: 'Merkez',
+        selections: {
+          floor_count: 2,
+        },
+      },
+      {
+        service: hafifCelikService,
+        rules: INITIAL_PRICING_RULES,
+      }
+    );
+    const floorItem = ciftKatResult.items.find((i) => i.itemCode === 'FLOOR_DOUBLE_STORY');
+    expect(floorItem).toBeDefined();
+    expect(floorItem?.totalPrice).toBe(100 * 1500); // 150,000 ₺
+    expect(ciftKatResult.subtotal).toBe(tekKatResult.subtotal + 150000);
+  });
 });

@@ -79,9 +79,29 @@ export function calculateQuote(
       (r) =>
         r.code === code &&
         r.isActive &&
-        (!r.serviceId || r.serviceId === service.id)
+        (!r.serviceId || r.serviceId === service.id || r.serviceId === service.slug)
     );
   };
+
+  // 2.5. Kat Sayısı Farkı (Çift Katlı / Dubleks Farkı)
+  const isDoubleStory = Number(selections.floor_count) === 2;
+  if (isDoubleStory) {
+    const floorRule = getRule('floor_double_story');
+    if (floorRule && floorRule.unitPrice > 0) {
+      const floorDiffTotal = roundCurrency(buildingM2 * floorRule.unitPrice);
+      items.push({
+        category: 'Statik & Kat Düzeni',
+        itemCode: 'FLOOR_DOUBLE_STORY',
+        itemTitle: floorRule.title || 'Çift Katlı / Dubleks Ara Kat & Merdiven',
+        quantity: buildingM2,
+        unitLabel: floorRule.unitLabel || '₺/m²',
+        unitPrice: floorRule.unitPrice,
+        totalPrice: floorDiffTotal,
+        isQuoteOnly: false,
+        note: `Çift katlı projeler için ara kat çelik döşeme tabliyesi ve merdiven konstrüksiyon bedeli.`,
+      });
+    }
+  }
 
   // 3. Temel & Resmi İşlemler (Foundation & Permits)
   const foundationChoice = selections.foundation || 'temel_yok';
@@ -360,6 +380,109 @@ export function calculateQuote(
       totalPrice: rPrice,
       isQuoteOnly: false,
     });
+  }
+
+  // 9.5. Dinamik ve Hizmete Özel Ekstra Parametreler (Admin panelden eklenen kurallar)
+  const STANDARD_CORE_CODES = [
+    'foundation_subasman',
+    'permit_and_projects',
+    'facade_standart',
+    'facade_fibercement',
+    'facade_composite',
+    'flooring_parquet',
+    'flooring_ceramic',
+    'heating_sulu',
+    'heating_elektrikli',
+    'kitchen_lower_cabinet',
+    'kitchen_upper_cabinet',
+    'kitchen_countertop',
+    'extra_wc',
+    'extra_bathroom',
+    'extra_veranda',
+    'extra_railing',
+    'floor_double_story',
+  ];
+
+  const formatCategoryName = (cat: string) => {
+    switch (cat) {
+      case 'bathroom':
+        return 'Islak Hacimler';
+      case 'kitchen':
+        return 'Mutfak Donanımı';
+      case 'facade':
+        return 'Dış Cephe';
+      case 'flooring':
+        return 'İç Mekan & Zemin';
+      case 'heating':
+        return 'Isıtma Sistemleri';
+      case 'foundation':
+        return 'Temel & Altyapı';
+      case 'permit':
+        return 'Resmi İşlemler';
+      case 'extra':
+        return 'Ekstra Donanımlar';
+      default:
+        return cat || 'Özel Seçenekler';
+    }
+  };
+
+  const dynamicRules = rules.filter(
+    (r) =>
+      r.isActive &&
+      (!r.serviceId || r.serviceId === service.id || r.serviceId === service.slug) &&
+      !STANDARD_CORE_CODES.includes(r.code)
+  );
+
+  for (const dynRule of dynamicRules) {
+    const rawVal = selections[dynRule.code];
+    if (
+      rawVal !== undefined &&
+      rawVal !== null &&
+      rawVal !== false &&
+      rawVal !== 0 &&
+      rawVal !== '0' &&
+      rawVal !== 'yok'
+    ) {
+      let qty = 1;
+      if (typeof rawVal === 'number') {
+        qty = rawVal;
+      } else if (typeof rawVal === 'string' && !isNaN(Number(rawVal))) {
+        qty = Number(rawVal);
+      } else if (typeof rawVal === 'boolean') {
+        qty = rawVal ? 1 : 0;
+      }
+
+      if (qty > 0) {
+        if (dynRule.pricingType === 'quote_only') {
+          hasQuoteOnlyItems = true;
+          quoteOnlyCount++;
+          items.push({
+            category: formatCategoryName(dynRule.category),
+            itemCode: dynRule.code,
+            itemTitle: dynRule.title,
+            quantity: qty,
+            unitLabel: dynRule.unitLabel || 'Keşif',
+            unitPrice: 0,
+            totalPrice: 0,
+            isQuoteOnly: true,
+            note: dynRule.description || 'Statik proje ve yerinde keşif ile kesinleşir.',
+          });
+        } else {
+          const itemTotal = roundCurrency(qty * dynRule.unitPrice);
+          items.push({
+            category: formatCategoryName(dynRule.category),
+            itemCode: dynRule.code,
+            itemTitle: dynRule.title,
+            quantity: qty,
+            unitLabel: dynRule.unitLabel,
+            unitPrice: dynRule.unitPrice,
+            totalPrice: itemTotal,
+            isQuoteOnly: false,
+            note: dynRule.description || undefined,
+          });
+        }
+      }
+    }
   }
 
   // 10. Nakliye & Lojistik (Shipping by location)

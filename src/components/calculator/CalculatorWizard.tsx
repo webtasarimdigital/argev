@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   CalculatorStep,
+  PricingRule,
   QuoteCalculationResult,
   Service,
 } from '@/types/calculator';
@@ -27,18 +28,21 @@ import {
   MapPin,
   Building2,
   Sparkles,
+  X,
 } from 'lucide-react';
 
 interface CalculatorWizardProps {
   initialServiceSlug?: string;
   services: Service[];
   steps: CalculatorStep[];
+  pricingRules?: PricingRule[];
 }
 
 export function CalculatorWizard({
   initialServiceSlug,
   services,
   steps,
+  pricingRules = [],
 }: CalculatorWizardProps) {
   // If a service was pre-selected (from URL or card click), start on Step 1 (Proje Ölçüleri) directly!
   const [currentStepIndex, setCurrentStepIndex] = useState(initialServiceSlug ? 1 : 0);
@@ -97,6 +101,7 @@ export function CalculatorWizard({
     kvkkConsent: true,
   });
   const [formError, setFormError] = useState<string | null>(null);
+  const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
 
   // Find currently selected service object
   const currentService = useMemo(() => {
@@ -154,6 +159,65 @@ export function CalculatorWizard({
   const totalStepsCount = steps.length + 1;
   const isReviewStep = currentStepIndex === steps.length;
   const currentStep = !isReviewStep ? (steps[currentStepIndex] || steps[0]) : null;
+
+  const STANDARD_CORE_CODES = useMemo(
+    () => [
+      'foundation_subasman',
+      'permit_and_projects',
+      'facade_standart',
+      'facade_fibercement',
+      'facade_composite',
+      'flooring_parquet',
+      'flooring_ceramic',
+      'heating_sulu',
+      'heating_elektrikli',
+      'kitchen_lower_cabinet',
+      'kitchen_upper_cabinet',
+      'kitchen_countertop',
+      'extra_wc',
+      'extra_bathroom',
+      'extra_veranda',
+      'extra_railing',
+      'floor_double_story',
+    ],
+    []
+  );
+
+  // Dynamic / Custom pricing rules that apply to this service
+  const serviceDynamicRules = useMemo(() => {
+    return pricingRules.filter(
+      (r) =>
+        r.isActive &&
+        (!r.serviceId || r.serviceId === currentService.id || r.serviceId === currentService.slug) &&
+        !STANDARD_CORE_CODES.includes(r.code)
+    );
+  }, [pricingRules, currentService, STANDARD_CORE_CODES]);
+
+  // Which dynamic rules belong to the currently viewed step?
+  const currentStepDynamicRules = useMemo(() => {
+    if (!currentStep) return [];
+    const stepNum = currentStep.stepNumber;
+    if (stepNum === 3) {
+      return serviceDynamicRules.filter((r) => r.category === 'foundation' || r.category === 'permit');
+    }
+    if (stepNum === 4) {
+      return serviceDynamicRules.filter((r) => r.category === 'facade');
+    }
+    if (stepNum === 5) {
+      return serviceDynamicRules.filter((r) => r.category === 'flooring' || r.category === 'heating');
+    }
+    if (stepNum === 6) {
+      return serviceDynamicRules.filter((r) => r.category === 'kitchen');
+    }
+    if (stepNum === 7) {
+      return serviceDynamicRules.filter((r) => r.category === 'bathroom');
+    }
+    if (stepNum === 8) {
+      const standardCats = ['foundation', 'permit', 'facade', 'flooring', 'heating', 'kitchen', 'bathroom'];
+      return serviceDynamicRules.filter((r) => !standardCats.includes(r.category));
+    }
+    return [];
+  }, [currentStep, serviceDynamicRules]);
 
   // Handle lead submission (WhatsApp or Form)
   const handleSubmitLead = async (channel: 'whatsapp_intent' | 'form') => {
@@ -442,7 +506,7 @@ export function CalculatorWizard({
                           val: 1,
                           label: 'Tek Katlı',
                           desc: 'Müstakil ve Ferah Yaşam',
-                          img: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=400&q=80',
+                          img: '/hafif-celik-ev.jpg',
                         },
                         {
                           val: 2,
@@ -582,6 +646,148 @@ export function CalculatorWizard({
             })}
           </div>
 
+          {/* Dynamic / Custom Rules for this Service & Step */}
+          {currentStepDynamicRules.length > 0 && (
+            <div className="mt-6 pt-5 border-t-2 border-dashed border-bronze/30 space-y-3">
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-bronze" />
+                <span className="text-xs uppercase font-bold tracking-wider text-bronze">
+                  {currentService.name} Özel Ekstra Seçenekleri
+                </span>
+              </div>
+
+              <div className="space-y-2.5">
+                {currentStepDynamicRules.map((dyn) => {
+                  const val = selections[dyn.code];
+                  const isSelected =
+                    val !== undefined &&
+                    val !== null &&
+                    val !== false &&
+                    val !== 0 &&
+                    val !== '0' &&
+                    val !== 'yok';
+
+                  return (
+                    <div
+                      key={dyn.id || dyn.code}
+                      className={`p-3.5 rounded-xl border transition-all ${
+                        isSelected
+                          ? 'bg-amber-50/40 border-bronze shadow-sm'
+                          : 'bg-white border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-semibold text-sm text-navy-dark">
+                              {dyn.title}
+                            </span>
+                            {dyn.pricingType === 'quote_only' ? (
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">
+                                Keşif Gerektirir
+                              </span>
+                            ) : (
+                              <span className="text-xs font-bold text-bronze">
+                                +{formatCurrency(dyn.unitPrice)} {dyn.unitLabel ? `/ ${dyn.unitLabel}` : ''}
+                              </span>
+                            )}
+                          </div>
+                          {dyn.description && (
+                            <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                              {dyn.description}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Control according to dyn.pricingType */}
+                        <div className="shrink-0 flex items-center gap-2">
+                          {dyn.pricingType === 'per_piece' ? (
+                            <div className="flex items-center gap-2 bg-gray-50 p-1 rounded-lg border border-gray-200">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const cur = Number(selections[dyn.code]) || 0;
+                                  if (cur > 0) updateSelection(dyn.code, cur - 1);
+                                }}
+                                className="w-8 h-8 rounded-md bg-white border border-gray-300 flex items-center justify-center font-bold text-sm text-gray-700 hover:bg-gray-100 active:scale-95"
+                              >
+                                -
+                              </button>
+                              <span className="w-8 text-center font-bold text-sm text-navy">
+                                {Number(selections[dyn.code]) || 0}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const cur = Number(selections[dyn.code]) || 0;
+                                  updateSelection(dyn.code, cur + 1);
+                                }}
+                                className="w-8 h-8 rounded-md bg-white border border-gray-300 flex items-center justify-center font-bold text-sm text-gray-700 hover:bg-gray-100 active:scale-95"
+                              >
+                                +
+                              </button>
+                            </div>
+                          ) : dyn.pricingType === 'per_m2_custom' ? (
+                            <div className="relative w-28">
+                              <input
+                                type="number"
+                                min={0}
+                                value={selections[dyn.code] ?? ''}
+                                onChange={(e) =>
+                                  updateSelection(
+                                    dyn.code,
+                                    e.target.value === '' ? 0 : parseFloat(e.target.value)
+                                  )
+                                }
+                                placeholder="0"
+                                className="w-full px-2.5 py-1.5 pr-8 rounded-lg border border-gray-300 bg-white text-sm font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-bronze"
+                              />
+                              <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium pointer-events-none">
+                                m²
+                              </span>
+                            </div>
+                          ) : dyn.pricingType === 'per_linear_meter' ? (
+                            <div className="relative w-28">
+                              <input
+                                type="number"
+                                min={0}
+                                value={selections[dyn.code] ?? ''}
+                                onChange={(e) =>
+                                  updateSelection(
+                                    dyn.code,
+                                    e.target.value === '' ? 0 : parseFloat(e.target.value)
+                                  )
+                                }
+                                placeholder="0"
+                                className="w-full px-2.5 py-1.5 pr-10 rounded-lg border border-gray-300 bg-white text-sm font-semibold text-gray-800 focus:outline-none focus:ring-1 focus:ring-bronze"
+                              />
+                              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium pointer-events-none">
+                                mtül
+                              </span>
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => updateSelection(dyn.code, !isSelected)}
+                              className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                                isSelected
+                                  ? 'bg-bronze text-white shadow-sm'
+                                  : 'border border-gray-300 text-gray-700 bg-white hover:bg-gray-100'
+                              }`}
+                            >
+                              {isSelected ? <Check className="w-3.5 h-3.5" /> : null}
+                              <span>{isSelected ? 'Eklendi' : '+ Ekle'}</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Step Navigation Bar */}
           <div className="mt-8 pt-6 border-t border-gray-200 flex items-center justify-between">
             <button
@@ -606,152 +812,44 @@ export function CalculatorWizard({
         </div>
       )}
 
-      {/* Final Step: Complete Proposal Summary, Itemized Demands, and Lead Form */}
+      {/* Final Step: Direct Lead Proposal Form (No Redundant Tables) */}
       {isReviewStep && (
         <div className="space-y-6">
           <div className="luxury-card p-6 sm:p-8 rounded-2xl">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-gray-200">
               <div>
                 <span className="text-xs uppercase font-bold tracking-wider text-bronze">
-                  TEKLİF DETAYI VE MALİYET DÖKÜMÜ
+                  SON ADIM • TEKLİFİNİZİ ALIN
                 </span>
                 <h2 className="text-xl sm:text-2xl font-serif font-bold text-navy-dark mt-1">
-                  {currentService.name} Teklif Özeti
+                  {currentService.name} Teklif Formu
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                  Girdiğiniz ölçülere ve seçtiğiniz alternatif taleplere göre hesaplanmıştır.
+                  Seçtiğiniz {selections.building_m2 || 0} m² proje tercihlerine göre teklifinizi anında WhatsApp ile alın veya sisteme kaydedin.
                 </p>
               </div>
 
-              <button
-                type="button"
-                onClick={() => goToStep(0)}
-                className="self-start sm:self-auto flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-gray-300 text-xs font-semibold text-gray-600 hover:bg-gray-50"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Seçimleri Değiştir</span>
-              </button>
-            </div>
-
-            {/* Quick Specs Badges */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-6">
-              <div className="p-3 rounded-xl bg-warm-white border border-warm-border">
-                <span className="text-[11px] text-gray-500 block">Yapı Alanı:</span>
-                <span className="text-base font-bold text-navy">{selections.building_m2} m²</span>
-              </div>
-              <div className="p-3 rounded-xl bg-warm-white border border-warm-border">
-                <span className="text-[11px] text-gray-500 block">Paket Türü:</span>
-                <span className="text-base font-bold text-navy capitalize">
-                  {selections.package_slug?.replace('-', ' ')}
-                </span>
-              </div>
-              <div className="p-3 rounded-xl bg-warm-white border border-warm-border">
-                <span className="text-[11px] text-gray-500 block">Lokasyon:</span>
-                <span className="text-base font-bold text-navy">{selections.city} / {selections.district || 'Merkez'}</span>
-              </div>
-              <div className="p-3 rounded-xl bg-warm-white border border-warm-border">
-                <span className="text-[11px] text-gray-500 block">Kat & Oda:</span>
-                <span className="text-base font-bold text-navy">{selections.floor_count} Kat • {selections.room_count}</span>
-              </div>
-            </div>
-
-            {/* Line Items Breakdown Table */}
-            <div className="border border-gray-200 rounded-xl overflow-hidden mb-6">
-              <div className="bg-gray-50 px-4 py-2.5 border-b border-gray-200 text-xs font-bold text-navy-dark uppercase tracking-wider flex justify-between">
-                <span>İmalat Kalemi / Seçilen Alternatif Talep</span>
-                <span>Tutar</span>
-              </div>
-
-              <div className="divide-y divide-gray-100 text-xs">
-                {calculationResult?.items.map((item, idx) => (
-                  <div key={idx} className="p-4 flex items-start justify-between gap-4 hover:bg-gray-50/50">
-                    <div>
-                      <div className="font-semibold text-navy-dark text-sm">{item.itemTitle}</div>
-                      <div className="text-gray-500 mt-0.5">
-                        {item.category} • {item.isQuoteOnly ? 'Keşif Gerektirir' : `${item.quantity} ${item.unitLabel}`}
-                        {item.note && ` (${item.note})`}
-                      </div>
-                    </div>
-                    <div className="font-bold text-sm text-gray-900 shrink-0 text-right">
-                      {item.isQuoteOnly ? (
-                        <span className="text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 font-semibold">
-                          Keşif Sonrası
-                        </span>
-                      ) : (
-                        formatCurrency(item.totalPrice)
-                      )}
-                    </div>
-                  </div>
-                ))}
-
-                {(!calculationResult?.items || calculationResult.items.length <= 1) && (
-                  <div className="p-4 text-gray-500 italic text-center bg-gray-50/30">
-                    Ekstra alternatif talep seçilmedi (Yalnızca standart çelik yapı karkası ve paket teslimi).
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Financial Summary */}
-            <div className="bg-warm-card border border-warm-border p-5 rounded-xl space-y-2 text-sm mb-6">
-              <div className="flex justify-between text-gray-600">
-                <span>Ara Toplam:</span>
-                <span className="font-semibold text-gray-900">
-                  {formatCurrency(calculationResult?.subtotal || 0)}
-                </span>
-              </div>
-              <div className="flex justify-between text-gray-600">
-                <span>KDV (%{calculationResult?.kdvRate || 20}):</span>
-                <span className="font-semibold text-gray-900">
-                  {formatCurrency(calculationResult?.kdvTotal || 0)}
-                </span>
-              </div>
-
-              <div className="pt-3 border-t border-gray-200 flex items-baseline justify-between">
-                <div>
-                  <span className="text-base font-bold text-navy-dark block">Tahmini Toplam Tutar:</span>
-                  <span className="text-xs text-gray-500">Tüm vergiler ve montaj dahil</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-2xl sm:text-3xl font-bold font-serif text-navy">
+              <div className="flex items-center gap-3">
+                <div className="text-left sm:text-right bg-warm-white px-3.5 py-2 rounded-xl border border-warm-border">
+                  <span className="text-[10px] text-gray-400 block font-semibold uppercase">Tahmini Toplam</span>
+                  <span className="text-lg sm:text-xl font-bold font-serif text-[#D4560A]">
                     {formatCurrency(calculationResult?.grandTotal || 0)}
                   </span>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => goToStep(0)}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-300 text-xs font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+                  title="Önceki Adımları Düzenle"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Düzenle</span>
+                </button>
               </div>
-
-              {calculationResult?.hasQuoteOnlyItems && (
-                <div className="mt-3 p-3 rounded-lg bg-amber-50 border border-amber-200/70 text-xs text-amber-800 flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                  <span>
-                    Temel / Subasman gibi araziye bağlı opsiyonlar seçildiğinden, nihai sözleşme bedeli parsel keşfi sonrasında netleşecektir.
-                  </span>
-                </div>
-              )}
             </div>
 
-            {/* Notice Note */}
-            <div className="text-xs text-gray-500 flex items-center gap-1.5 mb-8">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>
-                Hesaplanan fiyatlar 15 gün süreyle bağlayıcıdır. Sözleşme sonrası sürpriz masraf çıkmaz.
-              </span>
-            </div>
-
-            {/* Lead Form Inputs */}
-            <div className="pt-6 border-t border-gray-200">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-full bg-bronze/10 text-bronze flex items-center justify-center">
-                  <FileText className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="font-serif font-bold text-navy-dark text-lg">
-                    Teklifinizi Hemen Alın ve İletişime Geçin
-                  </h3>
-                  <p className="text-xs text-gray-500">
-                    Özet dökümünüzü WhatsApp üzerinden anında yetkiliye iletebilir veya proje danışmanımızın sizi aramasını sağlayabilirsiniz.
-                  </p>
-                </div>
-              </div>
+            {/* Lead Form Direct Inputs */}
+            <div className="pt-6">
 
               {formError && (
                 <div className="p-3 mb-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
@@ -870,70 +968,9 @@ export function CalculatorWizard({
         )}
       </div>
 
-      {/* Right Column: Seçilen Yapı Önizlemesi & Tahmini Maliyet Özeti (Kolayhesap Reference) */}
+      {/* Right Column: Tahmini Maliyet Özeti */}
       <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-24 space-y-4">
-        {/* Card 1: Seçilen Yapı Önizlemesi */}
-        <div className="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden">
-          <div className="bg-white px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-lg bg-orange-100 text-[#D4560A] flex items-center justify-center">
-                <Home className="w-3.5 h-3.5" />
-              </div>
-              <h3 className="font-bold text-sm text-gray-900">Seçilen Yapı Önizlemesi</h3>
-            </div>
-            <span className="text-[10px] font-semibold text-gray-400 bg-gray-50 px-2 py-0.5 rounded">
-              Canlı Görünüm
-            </span>
-          </div>
-
-          <div className="relative aspect-[16/10] bg-gray-900 overflow-hidden group">
-            <img
-              src={currentService.featuredImage || '/celik-villa-aksam.jpg'}
-              alt={currentService.name}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white text-xs">
-              <span className="bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-[11px] font-medium border border-white/10">
-                {currentService.name}
-              </span>
-              <span className="bg-[#D4560A] text-white px-2 py-1 rounded text-[11px] font-bold shadow">
-                {selections.building_m2 || 0} m²
-              </span>
-            </div>
-          </div>
-
-          <div className="bg-[#0F172A] text-white p-4">
-            <h4 className="font-bold text-base text-white">
-              {selections.building_m2 || 0} m² {currentService.name}
-            </h4>
-            <p className="text-xs text-gray-400 mt-0.5">
-              Girdiğiniz metrekareye ve proje tercihlerine göre örnek görünüm.
-            </p>
-            <div className="mt-3 flex flex-wrap items-center gap-1.5">
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-white/10 text-amber-400 text-xs font-semibold">
-                <Maximize2 className="w-3 h-3" />
-                {selections.building_m2 || 0} m²
-              </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-white/10 text-gray-200 text-xs font-medium">
-                <Building2 className="w-3 h-3 text-bronze" />
-                {Number(selections.floor_count) === 2 ? 'Çift Katlı' : 'Tek Katlı'}
-              </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-white/10 text-gray-200 text-xs font-medium">
-                <Home className="w-3 h-3 text-bronze" />
-                {selections.room_count || '3+1'}
-              </span>
-              {selections.city && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-white/10 text-gray-200 text-xs font-medium">
-                  <MapPin className="w-3 h-3 text-bronze" />
-                  {selections.city}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Card 2: Tahmini Maliyet Özeti */}
+        {/* Tahmini Maliyet Özeti */}
         <div className="bg-[#0F172A] text-white rounded-2xl shadow-card border border-gray-800 overflow-hidden">
           <div className="px-5 py-3.5 border-b border-gray-800 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -991,7 +1028,7 @@ export function CalculatorWizard({
 
             {/* Dynamic Selected Extras (Only added when user chooses them) */}
             {calculationResult?.items
-              ?.filter((it) => it.itemCode !== 'base-structure' && it.itemCode !== 'package-discount' && it.totalPrice > 0)
+              ?.filter((it) => it.category !== 'Yapı Gövdesi' && it.category !== 'Lojistik & Nakliye' && it.totalPrice > 0)
               .map((it, idx) => (
                 <div key={idx} className="flex items-center justify-between pt-2 border-t border-gray-800/80 text-gray-300">
                   <span className="text-gray-400 truncate max-w-[170px]" title={it.itemTitle}>
@@ -1023,26 +1060,142 @@ export function CalculatorWizard({
     </div>
 
     {/* Mobile Sticky Bar for quick look on small screens */}
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0F172A]/95 backdrop-blur-md border-t border-gray-800 p-3 px-4 flex items-center justify-between text-white shadow-2xl">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0F172A]/95 backdrop-blur-md border-t border-gray-800 p-2.5 px-4 flex items-center justify-between text-white shadow-2xl safe-area-bottom">
       <div>
-        <span className="text-[10px] uppercase text-gray-400 block font-semibold">Tahmini Tutar</span>
-        <span className="text-lg font-bold text-[#D4560A] font-serif">
+        <span className="text-[10px] uppercase text-gray-400 block font-semibold leading-tight">Tahmini Tutar</span>
+        <span className="text-base font-bold text-[#D4560A] font-serif">
           {formatCurrency(calculationResult?.grandTotal || 0)}
         </span>
       </div>
       <button
         type="button"
-        onClick={() => {
-          if (!isReviewStep) {
-            setCurrentStepIndex(steps.length);
-          }
-        }}
-        className="px-4 py-2 rounded-lg bg-[#D4560A] hover:bg-orange-600 text-white font-semibold text-xs flex items-center gap-1.5 shadow"
+        onClick={() => setIsMobileModalOpen(true)}
+        className="px-4 py-2 rounded-xl bg-[#D4560A] hover:bg-orange-600 text-white font-semibold text-xs flex items-center gap-1.5 shadow-lg active:scale-95 transition-all"
       >
-        <span>{isReviewStep ? 'Teklifi Al' : 'Teklif Dökümü'}</span>
+        <span>Teklif Al</span>
         <ArrowRight className="w-3.5 h-3.5" />
       </button>
     </div>
+
+    {/* Mobile Popup Modal: Hızlı Teklif Al */}
+    {isMobileModalOpen && (
+      <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fadeIn">
+        <div className="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 sm:p-7 text-white shadow-2xl max-h-[90vh] overflow-y-auto space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div>
+              <span className="text-[10px] uppercase font-bold tracking-widest text-[#D4560A] block">
+                HIZLI TEKLİF BAŞVURUSU
+              </span>
+              <h3 className="font-serif font-bold text-lg text-white">
+                {currentService.name} Teklifi
+              </h3>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsMobileModalOpen(false)}
+              className="p-1.5 rounded-xl bg-slate-800 text-slate-400 hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+            <span className="text-xs text-slate-300 font-medium">
+              {selections.building_m2 || 0} m² • {Number(selections.floor_count) === 2 ? 'Çift Katlı' : 'Tek Katlı'}
+            </span>
+            <span className="text-base font-bold text-[#D4560A] font-serif">
+              {formatCurrency(calculationResult?.grandTotal || 0)}
+            </span>
+          </div>
+
+          {formError && (
+            <div className="p-3 rounded-xl bg-rose-950/80 border border-rose-800 text-rose-300 text-xs flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+              <span>{formError}</span>
+            </div>
+          )}
+
+          <div className="space-y-3 text-xs">
+            <div>
+              <label className="block text-slate-300 font-semibold mb-1">
+                Adınız ve Soyadınız <span className="text-[#D4560A]">*</span>
+              </label>
+              <input
+                type="text"
+                value={leadForm.fullName}
+                onChange={(e) => setLeadForm({ ...leadForm, fullName: e.target.value })}
+                placeholder="Örn: Ahmet Yılmaz"
+                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:ring-1 focus:ring-[#D4560A]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-slate-300 font-semibold mb-1">
+                Telefon Numaranız <span className="text-[#D4560A]">*</span>
+              </label>
+              <input
+                type="tel"
+                value={leadForm.phone}
+                onChange={(e) => setLeadForm({ ...leadForm, phone: e.target.value })}
+                placeholder="0 (5XX) XXX XX XX"
+                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:ring-1 focus:ring-[#D4560A]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-slate-300 font-semibold mb-1">
+                Arsa / Notlar (Opsiyonel)
+              </label>
+              <input
+                type="text"
+                value={leadForm.notes}
+                onChange={(e) => setLeadForm({ ...leadForm, notes: e.target.value })}
+                placeholder="Örn: Düzce Merkez 400 m² arsa"
+                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:ring-1 focus:ring-[#D4560A]"
+              />
+            </div>
+
+            <div className="flex items-start gap-2 pt-1">
+              <input
+                type="checkbox"
+                id="kvkk-mobile"
+                checked={leadForm.kvkkConsent}
+                onChange={(e) => setLeadForm({ ...leadForm, kvkkConsent: e.target.checked })}
+                className="mt-0.5 h-3.5 w-3.5 rounded border-slate-700 text-[#D4560A] focus:ring-[#D4560A]"
+              />
+              <label htmlFor="kvkk-mobile" className="text-[11px] text-slate-400">
+                <a href="/kvkk" target="_blank" className="text-[#D4560A] underline">
+                  KVKK Aydınlatma Metni
+                </a>
+                &apos;ni onaylıyorum.
+              </label>
+            </div>
+          </div>
+
+          <div className="pt-2 flex flex-col gap-2.5">
+            <button
+              type="button"
+              disabled={isSubmitting}
+              onClick={() => handleSubmitLead('whatsapp_intent')}
+              className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-md flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>WhatsApp ile Hızlı Teklif Al</span>
+            </button>
+
+            <button
+              type="button"
+              disabled={isSubmitting}
+              onClick={() => handleSubmitLead('form')}
+              className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-semibold text-xs shadow flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
+            >
+              <FileText className="w-4 h-4 text-[#D4560A]" />
+              <span>Teklifi Oluştur & Kaydet</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
   </div>
 );
 }

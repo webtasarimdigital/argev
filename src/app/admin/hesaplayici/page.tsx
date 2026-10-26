@@ -135,7 +135,7 @@ export default function AdminHesaplayiciEditorPage() {
   };
 
   const serviceRules = pricingRules.filter(
-    (r) => !r.serviceId || r.serviceId === activeService?.id
+    (r) => !r.serviceId || r.serviceId === activeService?.id || r.serviceId === activeService?.slug
   );
 
   const handleUpdateRuleField = (id: string, field: keyof PricingRule, val: any) => {

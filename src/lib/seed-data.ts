@@ -464,6 +464,19 @@ export const INITIAL_PRICING_RULES: PricingRule[] = [
     isActive: true,
     displayOrder: 15,
   },
+  {
+    id: 'rule-floor-double-story',
+    category: 'extra',
+    code: 'floor_double_story',
+    title: 'Çift Katlı / Dubleks Ara Kat & Merdiven',
+    description: 'Ara kat çelik döşeme karkası, kompozit tabliye ve iç merdiven konstrüksiyonu.',
+    pricingType: 'per_m2_building',
+    unitLabel: '₺/m²',
+    unitPrice: 1500,
+    isOptional: true,
+    isActive: true,
+    displayOrder: 16,
+  },
 ];
 
 export const INITIAL_CALCULATOR_STEPS: CalculatorStep[] = [
@@ -1236,7 +1249,7 @@ ARGEV Yapı; Düzce Merkez, Akçakoca, Bolu, Sakarya ve çevresinde arsanıza ö
 ## Neden Çelik Tercih Edilmelidir?
 
 Ahşap sundurmalar zamanla çürür, eğilir ve yangın riski taşır; hafif tenteler ise ilk fırtınada yırtılır. ARGEV çelik garajları statik rüzgar ve kar hesapları yapılarak 100 km/s üzeri fırtınalara ve yoğun kar yüküne dayanacak şekilde sabitlenir.`,
-    coverImage: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1200&q=85',
+    coverImage: '/celik-garaj-sundurma.jpg',
     readingTimeMin: 4,
     publishedAt: '2026-04-10',
     isPublished: true,
@@ -1261,7 +1274,7 @@ Ahşap sundurmalar zamanla çürür, eğilir ve yangın riski taşır; hafif ten
 1. **Sıcak Dövme:** Döküm taklitleri değil, gerçek dövme demir detayları kullanılır.
 2. **Korozyon Önleyici Astar:** Dış ortamda paslanmayı engellemek için epoksi astar ve daldırma galvaniz uygulanır.
 3. **Elektrostatik Toz Fırın Boyası:** 200°C fırınlarda pişirilen boya, yağmur ve güneşten dökülmez veya solmaz.`,
-    coverImage: 'https://images.unsplash.com/photo-1558036117-15d82a90b9b1?auto=format&fit=crop&w=1200&q=85',
+    coverImage: '/ferforje-ozel-imalat.jpg',
     readingTimeMin: 4,
     publishedAt: '2026-04-12',
     isPublished: true,

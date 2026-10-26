@@ -25,7 +25,19 @@ export type CalculatorFieldType =
 export interface PricingRule {
   id: string;
   serviceId?: string | null;
-  category: 'base' | 'package' | 'foundation' | 'permit' | 'facade' | 'flooring' | 'heating' | 'kitchen' | 'bathroom' | 'extra' | 'transport';
+  category:
+    | 'base'
+    | 'package'
+    | 'foundation'
+    | 'permit'
+    | 'facade'
+    | 'flooring'
+    | 'heating'
+    | 'kitchen'
+    | 'bathroom'
+    | 'extra'
+    | 'transport'
+    | (string & {});
   code: string;
   title: string;
   description?: string;

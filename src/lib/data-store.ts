@@ -110,8 +110,10 @@ function mapServiceRow(row: any, fallback?: Service): Service {
     summary: row.summary || fallback?.summary || '',
     description: row.description || fallback?.description || '',
     iconName: row.icon_name || row.iconName || fallback?.iconName || 'Home',
-    featuredImage: row.featured_image || row.featuredImage || fallback?.featuredImage || '',
     pricingType: row.pricing_type || row.pricingType || fallback?.pricingType || 'm2',
+    featuredImage: (fallback?.featuredImage && fallback.featuredImage.startsWith('/'))
+      ? fallback.featuredImage
+      : (row.featured_image || row.featuredImage || fallback?.featuredImage || ''),
     baseM2Price: Number(row.base_m2_price ?? row.baseM2Price ?? fallback?.baseM2Price ?? 0),
     minM2: Number(row.min_m2 ?? row.minM2 ?? fallback?.minM2 ?? 40),
     maxM2: Number(row.max_m2 ?? row.maxM2 ?? fallback?.maxM2 ?? 500),
@@ -255,10 +257,13 @@ export const DataStore = {
       try {
         const { data, error } = await supabase.from('pricing_rules').select('*').order('display_order');
         if (!error && data && data.length > 0) {
-          return data.map((row) => {
-            const fb = memory.find((m) => m.code === row.code);
+          const dbRules = data.map((row) => {
+            const fb = memory.find((m) => m.code === row.code || m.id === row.id);
             return mapPricingRuleRow(row, fb);
           });
+          const dbCodes = new Set(dbRules.map((r) => r.code));
+          const extraMemoryRules = memory.filter((m) => !dbCodes.has(m.code));
+          return [...dbRules, ...extraMemoryRules];
         }
       } catch (err) {
         console.warn('Supabase fetch pricing rules failed, falling back to local store:', err);
@@ -317,12 +322,13 @@ export const DataStore = {
     };
     store.pricingRules.push(newRule);
 
+    const isUUID = (str?: string | null) =>
+      Boolean(str && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str));
+
     const supabase = createAdminClient();
     if (supabase) {
       try {
-        await supabase.from('pricing_rules').insert({
-          id: newRule.id,
-          service_id: newRule.serviceId || null,
+        const payload: any = {
           category: newRule.category,
           code: newRule.code,
           title: newRule.title,
@@ -333,7 +339,14 @@ export const DataStore = {
           is_optional: newRule.isOptional ?? true,
           is_active: newRule.isActive,
           display_order: newRule.displayOrder,
-        });
+        };
+        if (isUUID(newRule.id)) {
+          payload.id = newRule.id;
+        }
+        if (isUUID(newRule.serviceId)) {
+          payload.service_id = newRule.serviceId;
+        }
+        await supabase.from('pricing_rules').insert(payload);
       } catch (err) {
         console.error('Supabase createPricingRule error:', err);
       }
@@ -346,10 +359,16 @@ export const DataStore = {
     const idx = store.pricingRules.findIndex((r) => r.id === idOrCode || r.code === idOrCode);
     if (idx !== -1) {
       const removed = store.pricingRules.splice(idx, 1)[0];
+      const isUUID = (str?: string | null) =>
+        Boolean(str && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str));
       const supabase = createAdminClient();
       if (supabase) {
         try {
-          await supabase.from('pricing_rules').delete().or(`id.eq.${removed.id},code.eq.${removed.code}`);
+          if (isUUID(removed.id)) {
+            await supabase.from('pricing_rules').delete().or(`id.eq.${removed.id},code.eq.${removed.code}`);
+          } else {
+            await supabase.from('pricing_rules').delete().eq('code', removed.code);
+          }
         } catch (err) {
           console.error('Supabase deletePricingRule error:', err);
         }

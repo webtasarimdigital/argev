@@ -21,13 +21,13 @@ export function StickyMobileBar() {
   return (
     <nav
       aria-label="Mobil Alt Navigasyon"
-      className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-navy-dark/95 backdrop-blur-lg border-t border-white/10 px-2 py-1.5 shadow-2xl safe-area-bottom"
+      className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-navy-dark/95 backdrop-blur-lg border-t border-white/10 px-1 py-1 shadow-2xl safe-area-bottom"
     >
-      <div className="max-w-md mx-auto flex items-center justify-around relative">
+      <div className="grid grid-cols-5 items-center max-w-sm mx-auto text-center relative">
         {/* 1. Ana Sayfa */}
         <Link
           href="/"
-          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-lg text-[10px] font-medium transition-colors ${
+          className={`flex flex-col items-center justify-center py-1 rounded-lg text-[10px] font-medium transition-colors ${
             isHome ? 'text-bronze font-bold' : 'text-gray-400 hover:text-white'
           }`}
         >
@@ -38,7 +38,7 @@ export function StickyMobileBar() {
         {/* 2. Hizmetler */}
         <Link
           href="/hizmetler"
-          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-lg text-[10px] font-medium transition-colors ${
+          className={`flex flex-col items-center justify-center py-1 rounded-lg text-[10px] font-medium transition-colors ${
             isServices ? 'text-bronze font-bold' : 'text-gray-400 hover:text-white'
           }`}
         >
@@ -46,16 +46,16 @@ export function StickyMobileBar() {
           <span>Hizmetler</span>
         </Link>
 
-        {/* 3. Ortada Yuvarlak Buton: Fiyat Hesapla */}
-        <div className="relative -top-5 flex flex-col items-center">
+        {/* 3. Ortada Tam Ortalı Buton: Fiyat Hesapla */}
+        <div className="flex flex-col items-center justify-center">
           <Link
             href="/fiyat-hesaplama"
-            className="w-14 h-14 rounded-full bg-gradient-to-tr from-bronze to-orange-500 text-white flex items-center justify-center shadow-lg shadow-bronze/40 border-4 border-navy-dark hover:scale-105 active:scale-95 transition-all"
+            className="w-11 h-11 rounded-full bg-gradient-to-tr from-bronze to-orange-500 text-white flex items-center justify-center shadow-lg shadow-bronze/40 border-2 border-navy-dark hover:scale-105 active:scale-95 transition-all -mt-3.5"
             aria-label="Fiyat Hesapla"
           >
-            <Calculator className="w-6 h-6 animate-pulse" />
+            <Calculator className="w-5 h-5" />
           </Link>
-          <span className="text-[9px] font-bold text-bronze mt-0.5 tracking-tight">
+          <span className="text-[9px] font-bold text-bronze mt-0.5 tracking-tight block">
             Hesapla
           </span>
         </div>
@@ -63,7 +63,7 @@ export function StickyMobileBar() {
         {/* 4. Blog */}
         <Link
           href="/blog"
-          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-lg text-[10px] font-medium transition-colors ${
+          className={`flex flex-col items-center justify-center py-1 rounded-lg text-[10px] font-medium transition-colors ${
             isBlog ? 'text-bronze font-bold' : 'text-gray-400 hover:text-white'
           }`}
         >
@@ -74,7 +74,7 @@ export function StickyMobileBar() {
         {/* 5. İletişim */}
         <Link
           href="/iletisim"
-          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-lg text-[10px] font-medium transition-colors ${
+          className={`flex flex-col items-center justify-center py-1 rounded-lg text-[10px] font-medium transition-colors ${
             isContact ? 'text-bronze font-bold' : 'text-gray-400 hover:text-white'
           }`}
         >

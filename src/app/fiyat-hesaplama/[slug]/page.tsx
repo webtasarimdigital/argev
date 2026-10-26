@@ -21,6 +21,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function ServiceCalculatorPage({ params }: PageProps) {
   const services = await DataStore.getServices();
   const service = await DataStore.getServiceBySlug(params.slug);
@@ -30,17 +33,15 @@ export default async function ServiceCalculatorPage({ params }: PageProps) {
   }
 
   const steps = await DataStore.getCalculatorSteps();
+  const pricingRules = await DataStore.getPricingRules();
 
   return (
-    <div className="pt-28 sm:pt-32 pb-12 bg-warm-white min-h-screen">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center pt-2 pb-3">
-        <span className="text-[11px] uppercase font-bold tracking-widest text-bronze block mb-1">
-          {service.name.toUpperCase()} ÖZEL HESAPLAMA
-        </span>
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-navy-dark tracking-tight mt-1 mb-2">
+    <div className="pt-24 sm:pt-32 pb-12 bg-warm-white min-h-screen">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center pt-1 pb-2">
+        <h1 className="text-xl sm:text-3xl font-serif font-bold text-navy-dark tracking-tight">
           {service.name} Fiyat Sihirbazı
         </h1>
-        <p className="text-xs sm:text-sm text-gray-600 max-w-xl mx-auto leading-relaxed">
+        <p className="hidden sm:block text-xs sm:text-sm text-gray-500 max-w-lg mx-auto mt-1 leading-relaxed">
           {service.summary}
         </p>
       </div>
@@ -49,6 +50,7 @@ export default async function ServiceCalculatorPage({ params }: PageProps) {
         initialServiceSlug={params.slug}
         services={services}
         steps={steps}
+        pricingRules={pricingRules}
       />
     </div>
   );
