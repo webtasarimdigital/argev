@@ -109,15 +109,15 @@ export function HeroSection() {
         </h1>
 
         {/* Subtitle */}
-        <p className="text-base sm:text-lg lg:text-xl text-gray-200 max-w-2xl mx-auto mb-10 leading-relaxed font-light drop-shadow">
+        <p className="text-base sm:text-lg lg:text-xl text-gray-200 max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed font-light drop-shadow">
           Milimetrik hassasiyette galvanizli çelik karkas, A+ ısı yalıtımı ve modern mimari estetik. Düzce fabrikamızda üretip arsanızda 45 günde anahtar teslim kuruyoruz.
         </p>
 
-        {/* Action CTAs: On mobile, Projelerimizi İnceleyin; on desktop, Fiyatınızı Hesaplayın + Projelerimizi İnceleyin */}
-        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto">
+        {/* Action CTAs: Desktop only (on mobile, bottom navigation bar already provides quick access) */}
+        <div className="hidden sm:flex flex-row items-center gap-4 w-auto">
           <Link
             href="/fiyat-hesaplama"
-            className="hidden sm:flex w-full sm:w-auto items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-bronze via-bronze-light to-bronze shadow-lg shadow-bronze/30 hover:shadow-bronze-glow hover:scale-[1.03] transition-all duration-300 shimmer-btn"
+            className="flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-bronze via-bronze-light to-bronze shadow-lg shadow-bronze/30 hover:shadow-bronze-glow hover:scale-[1.03] transition-all duration-300 shimmer-btn"
           >
             <Calculator className="w-5 h-5" />
             <span>Fiyatınızı Hesaplayın</span>
@@ -126,15 +126,14 @@ export function HeroSection() {
 
           <Link
             href="/projeler"
-            className="flex w-full sm:w-auto items-center justify-center gap-2 px-8 py-3.5 sm:py-4 rounded-xl text-sm sm:text-base font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md hover:border-white/40 transition-all duration-300 shadow-md hover:scale-[1.02]"
+            className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md hover:border-white/40 transition-all duration-300 shadow-md hover:scale-[1.02]"
           >
             <span>Projelerimizi İnceleyin</span>
-            <ArrowRight className="w-4 h-4 sm:hidden" />
           </Link>
 
           <a
             href="tel:05413980081"
-            className="hidden sm:flex w-full sm:w-auto items-center justify-center gap-2 px-6 py-4 rounded-xl text-sm font-semibold text-gray-200 hover:text-white bg-slate-900/60 hover:bg-slate-900/80 border border-white/15 backdrop-blur-md transition-all hover:border-bronze"
+            className="flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-sm font-semibold text-gray-200 hover:text-white bg-slate-900/60 hover:bg-slate-900/80 border border-white/15 backdrop-blur-md transition-all hover:border-bronze"
             title="Düzce Merkez Ofis"
           >
             <Phone className="w-4 h-4 text-bronze-light" />
@@ -143,7 +142,7 @@ export function HeroSection() {
         </div>
 
         {/* Key Architectural Metrics Bar with Hover Transitions */}
-        <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full max-w-5xl">
+        <div className="mt-8 sm:mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full max-w-5xl">
           <div className="p-4 rounded-xl bg-slate-950/70 border border-white/10 hover:border-bronze/50 backdrop-blur-md text-left shadow-lg hover:-translate-y-1 transition-all duration-300">
             <span className="text-2xl sm:text-3xl font-bold font-serif text-white block">
               %100
