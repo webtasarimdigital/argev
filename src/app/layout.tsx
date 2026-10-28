@@ -31,6 +31,9 @@ export const metadata: Metadata = {
       { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
+  verification: {
+    google: 'dGsO2BgfvjDEPvZtTRGqQX1hAw5AtoI12iOvjDxjjXA',
+  },
   openGraph: {
     title: 'ARGEV Yapı — Güvenli Çelik Mimarisi & Fiyat Hesaplayıcı',
     description: 'Düzce ve Batı Karadeniz için depreme tam dayanıklı hafif ve ağır çelik evler, çelik villalar. Şeffaf teklif hesaplama.',
@@ -99,6 +102,7 @@ export default function RootLayout({
   return (
     <html lang="tr" className="scroll-smooth">
       <head>
+        <meta name="google-site-verification" content="dGsO2BgfvjDEPvZtTRGqQX1hAw5AtoI12iOvjDxjjXA" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
         <link rel="icon" href="/logo.png" type="image/png" />
